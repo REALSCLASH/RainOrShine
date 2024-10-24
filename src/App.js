@@ -59,7 +59,7 @@ function HomeButton() {
   );
 }
 
-// Home component with its own layout
+// Home component  own layout
 function Home() {
   return (
     <div className="App">
