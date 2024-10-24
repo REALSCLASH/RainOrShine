@@ -1,38 +1,262 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Ensure padding and border are included in the element's total width */
+  font-family: 'Poppins', sans-serif;
+}
+
 .App {
   text-align: center;
+  align-items: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 90vw; /* Reduce width to allow space on the left and right */
+  margin: 0 auto; /* Center the container */
+  padding: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.left-side, .right-side {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.top-boxes {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.box, .wide-box {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(170, 170, 170);
+  padding: 0;
+  margin: 20px 0; /* Remove side margin and apply only vertical margin */
+  flex-grow: 1;
+  border-radius: 3px;
+}
+
+.box {
+  height: 200px; /* Height for the boxes in the left side */
+  width: 300px;
+}
+
+.wide-box {
+  height: 300px; /* Keep this height for the wide box */
+  width: 100%; /* Make the wide box responsive */
+  margin: 10px 0; /* Add margin for spacing */
+  overflow: hidden; /* Hide any overflow */
+}
+
+.image-container {
+  width: 100%; /* Full width of the box */
+  height: 100%; /* Adjust height to fill the box */
+  display: flex; /* Flex to center the image */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.image-container img {
+  max-width: 100%; /* Ensure the image does not overflow the container */
+  max-height: 100%; /* Ensure the image does not exceed the height of the container */
+  object-fit: cover; /* Maintain aspect ratio and fill the container */
+}
+
+.right-side {
+  padding-left: 70px; /* Add padding to the left side of the right-side container */
+}
+
+.right-side .box {
+  height: 200px; /* Set height to match content 3 */
+  flex-grow: 1;
+  width: 400px;
+}
+
+.box-header {
+  background-color: rgb(187, 187, 187); /* Different background color for the text section */
+  padding: 10px;
+  border-bottom: 1px solid rgb(170, 170, 170);
+  text-align: left; /* Align text to the left */
+  font-weight: bold; 
+}
+
+.box-subcontent {
+  font-size: 14px; /* Adjust font size for subcontent */
+  color: #555; /* A lighter color for better contrast */
+  margin-top: 1px; /* Add some space above the subcontent */
+}
+
+.box-content {
+  padding: 10px;
+  display: flex; /* Enable flexbox layout */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: calc(100% - 70px); /* Adjust height to fit within the box */
+}
+
+.box1 {}
+
+.box1 .box-content {
+  font-size: 70px; /* Adjust the size as needed */
+  color: #555;
+  font-weight: 600; 
+}
+
+.box2 .box-content,
+.box4 .box-content {
+  flex: 1; /* Allow each section to take equal width */
+  padding: 10px; /* Add some padding inside each section */
+  margin: 0 5px; /* Optional: Add horizontal spacing between sections */
+  gap: 30px; /* Set space between sections */
+}
+
+.box-header {
+  display: flex; /* Use flexbox layout */
+  justify-content: space-between; /* Space between elements */
+  align-items: center; /* Center items vertically */
+  background-color: rgb(187, 187, 187); /* Different background color for the text section */
+  padding: 10px;
+  border-bottom: 1px solid rgb(170, 170, 170);
+  text-align: left; /* Align text to the left */
+}
+
+.header-button {
+  margin-left: auto; /* Push the button to the right */
+  padding: 5px 10px; /* Padding for the button */
+  background-color: #ffff; /* Green background color */
+  color: black; /* White text color */
+  border: none; /* Remove default border */
+  border-radius: 3px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 14px; /* Font size for the button */
+}
+
+.header-button:hover {
+  background-color: rgb(130, 130, 130); /* Darker green on hover */
+}
+
+.logo-container {
+  position: absolute;
+  top: 20px; /* Adjust this value based on your needs */
+  left: 20px; /* Adjust this value based on your needs */
+}
+
+.logo {
+  width: 400px; /* Adjust the size as needed */
+  height: auto;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding-top: 120px; /* Create space for the logo (adjust value as needed) */
+}
+
+/* Responsive layout for tablets and smaller screens */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column; /* Stack the boxes vertically */
+    width: 95vw; /* Increase width slightly on smaller screens */
+  }
+
+  .top-boxes {
+    flex-direction: column;
+    gap: 10px; /* Reduce gap between boxes */
+  }
+
+  .box, .wide-box {
+    width: 100%; /* Full width for boxes on small screens */
+    margin: 10px 0; /* Reduce margins on smaller screens */
+  }
+
+  .right-side {
+    padding-left: 20px; /* Adjust padding for smaller screens */
+  }
+}
+
+/* Mobile layout */
+@media (max-width: 480px) {
+  .box {
+    height: 150px; /* Reduce box height on mobile */
+  }
+
+  .wide-box {
+    height: 200px; /* Reduce height of the wide box */
+  }
+
+  .right-side .box {
+    height: 0px; /* Adjust height for the fifth box on mobile if needed */
+  }
+}
+
+
+
+
+/* Specific styles for NewView */
+.left-side {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.right-side {
+  flex: 2;
+  height: 500px;
+  width: 600px;
+}
+.right-side .boxNew {
+    height: auto;
+    flex-grow: 1;
+    width: 800px;
+    margin-top: 20px;
+}
+
+/* Same button style */
+.home-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #8c8c8c;
   color: white;
+  border: none;
+  cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+.graph-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #8c8c8c;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 2px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.graph-button:hover {
+  background-color: #11b03e;
 }
+
+.home-button:hover {
+  background-color: #11b03e;
+}
+
+.selection-box {
+  width: 100%; /* Make the dropdown full width */
+  padding: 10px; /* Add some padding */
+  border: 1px solid rgb(170, 170, 170); /* Add border to match the box style */
+  border-radius: 3px; /* Rounded corners */
+  font-size: 12px; /* Font size for dropdown */
+  margin-bottom: 5px;
+}
+.box-contentNew {
+  padding: 30px;
+  display: flex; /* Enable flexbox layout */
+  flex-direction: column;
+
+  height: calc(100% - 70px); /* Adjust height to fit within the box */
+}
+
