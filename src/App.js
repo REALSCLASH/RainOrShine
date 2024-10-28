@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-route
 import myImage from './assets/graph.png'; // Adjust the path to your graph image file
 import logo from './assets/korkeasaari.png'; // Adjust the path to your logo file
 import graph from './assets/graph_output.png'; // Adjust the path to your logo file
+import GraphComponent from './components/GraphComponent';
 
 function App() {
   return (
@@ -103,7 +104,7 @@ function Home() {
                 <OpenButton /> {/* OpenButton for navigation */}
               </div>
               <div className="image-container">
-                <img src={myImage} alt="Description of myImage" />
+                <GraphComponent year={2023} month={10} day={1} viewType="Daily" dataType="Both" showSelectors={false} />
               </div>
             </div>
           </div>

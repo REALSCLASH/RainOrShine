@@ -11,7 +11,36 @@
   text-align: center;
   align-items: center;
 }
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%; /* Makes the component fill the container */
+  overflow: hidden;
+}
 
+.wide-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 300px; /* You can adjust height as necessary */
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.box-content, .box-contentNew {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+}
 .container {
   display: flex;
   flex-direction: row;
