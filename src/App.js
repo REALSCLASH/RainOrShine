@@ -4,6 +4,7 @@ import myImage from './assets/graph.png'; // Adjust the path to your graph image
 import logo from './assets/korkeasaari.png'; // Adjust the path to your logo file
 import graph from './assets/graph_output.png'; // Adjust the path to your logo file
 import GraphComponent from './components/GraphComponent';
+import { useState } from 'react';
 
 function App() {
   return (
@@ -143,92 +144,100 @@ function Home() {
 }
 
 function NewView() {
+  const [charts, setCharts] = useState([
+    { id: 1, year: 2023, month: 10, day: 1, viewType: 'Daily', dataType: 'Both' },
+  ]);
+
+  const addChart = () => {
+    const newId = charts.length ? charts[charts.length - 1].id + 1 : 1;
+    setCharts([...charts, { id: newId, year: 2023, month: 10, day: 1, viewType: 'Daily', dataType: 'Both' }]);
+  };
+
+  const removeChart = (id) => {
+    setCharts(charts.filter((chart) => chart.id !== id));
+  };
+
+  const handleInputChange = (id, field, value) => {
+    setCharts((prevCharts) =>
+      prevCharts.map((chart) =>
+        chart.id === id ? { ...chart, [field]: value } : chart
+      )
+    );
+  };
+
   return (
-    <div className="new-view">
-      <header className="App-header">
-        <div className="logo-container">
-          <img src={logo} alt="Logo" className="logo" />
-        </div>
-        <HomeButton /> {/* Button to navigate back to Home */}
-        <div className="container">
-          {/* Left side with dropdown menus */}
-          <div className="left-side">
-            <div className="box box1">
-              <div className="box-header">
-                <div>
-                  Valitse vaihtoehto
-                </div>
-              </div>
-              <div className="box-contentNew">
-                <div>
-                  <label htmlFor="year-select">Vuosi:</label>
-                  <select id="year-select" className="selection-box">
-                    <option value="2024">2024</option>
-                    <option value="2023">2023</option>
-                    <option value="2022">2022</option>
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="month-select">Kuukausi:</label>
-                  <select id="month-select" className="selection-box">
-                    <option value="january">Tammikuu</option>
-                    <option value="february">Helmikuu</option>
-                    <option value="march">Maaliskuu</option>
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="week-select">Viikko:</label>
-                  <select id="week-select" className="selection-box">
-                    <option value="week45">Vko 45</option>
-                    <option value="week44">Vko 44</option>
-                    <option value="week43">Vko 43</option>
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="day-select">Päivä:</label>
-                  <select id="day-select" className="selection-box">
-                    <option value="monday">Maanantai</option>
-                    <option value="tuesday">Tiistai</option>
-                    <option value="wednesday">Keskiviikko</option>
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="weather-select">Sää:</label>
-                  <select id="weather-select" className="selection-box">
-                    <option value="rain">Sade</option>
-                    <option value="temperature">Lämpötila</option>
-                    <option value="wind">Tuuli</option>
-                  </select>
-                </div>
-                <LoadGraphButton /> 
-              </div>
-            </div>
-          </div>
+    <div className="new-view min-h-screen bg-gray-100 flex flex-col items-center">
+      <header className="w-full max-w-4xl flex flex-col items-center py-8">
+        <img src={logo} alt="Logo" className="w-64 mb-8" />
+        
+        {/* Chart and Selector Pairs */}
+        <div className="w-full flex flex-col items-center space-y-6">
+          {charts.map((chart) => (
+            <div
+              key={chart.id}
+              className="flex flex-row w-full bg-white rounded-lg shadow-lg p-4 relative border border-gray-300"
+            >
+              <button
+                onClick={() => removeChart(chart.id)}
+                className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+              >
+                ✖
+              </button>
 
-          {/* Right side with a big box */}
-          <div className="right-side">
-            <div className="boxNew box2">
-              <div className="box-header">
-                <div>
-                  Kävijät
-                </div>
+              {/* Selector Section */}
+              <div className="flex flex-col w-1/3 pr-6 border-r border-gray-200 space-y-3">
+                <div className="text-gray-600 font-semibold">Valitse vaihtoehto</div>
+
+                {/* Selector Options */}
+                {['year', 'month', 'day', 'viewType', 'dataType'].map((field, idx) => (
+                  <div key={idx}>
+                    <label htmlFor={`${field}-select-${chart.id}`} className="block text-sm font-medium text-gray-700">
+                      {field.charAt(0).toUpperCase() + field.slice(1)}:
+                    </label>
+                    <select
+                      id={`${field}-select-${chart.id}`}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      value={chart[field]}
+                      onChange={(e) => handleInputChange(chart.id, field, e.target.value)}
+                    >
+                      {/* Render select options based on field */}
+                      {field === 'year' && ['2024', '2023', '2022'].map((y) => <option key={y} value={y}>{y}</option>)}
+                      {field === 'month' && ['1', '2', '3'].map((m) => <option key={m} value={m}>{m}</option>)}
+                      {field === 'day' && ['1', '2', '3'].map((d) => <option key={d} value={d}>{d}</option>)}
+                      {field === 'viewType' && ['Daily', 'Monthly'].map((v) => <option key={v} value={v}>{v}</option>)}
+                      {field === 'dataType' && ['Both', 'Wind', 'Temperature'].map((d) => <option key={d} value={d}>{d}</option>)}
+                    </select>
+                  </div>
+                ))}
               </div>
-              <div className="box-content">
-                <div className="image-container">
-                  <img src={graph} alt="graph output" />
+
+              {/* Chart Section */}
+              <div className="flex-grow pl-6">
+                <div className="text-gray-600 font-semibold mb-2">Kävijät</div>
+                <div className="h-64">
+                  <GraphComponent
+                    year={chart.year}
+                    month={chart.month}
+                    day={chart.day}
+                    viewType={chart.viewType}
+                    dataType={chart.dataType}
+                  />
                 </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
 
-
+        {/* Centered Add Chart Button below all charts */}
+        <button
+          onClick={addChart}
+          className="mt-8 w-40 bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
+        >
+          Add Chart
+        </button>
       </header>
     </div>
   );
 }
-
-
-
 
 export default App;

@@ -1,20 +1,13 @@
-// src/components/GraphComponent.js
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 
 const GraphComponent = ({ 
-  year = 2023, 
-  month = 7, 
-  day = 1, 
-  viewType = 'Monthly', 
-  dataType = 'Both', 
-  showSelectors = true 
+  year, 
+  month, 
+  day, 
+  viewType, 
+  dataType 
 }) => {
-  const [selectedYear, setSelectedYear] = useState(year);
-  const [selectedMonth, setSelectedMonth] = useState(month);
-  const [selectedDay, setSelectedDay] = useState(day);
-  const [selectedViewType, setSelectedViewType] = useState(viewType);
-  const [selectedDataType, setSelectedDataType] = useState(dataType);
   const [graphData, setGraphData] = useState([]);
   const [layout, setLayout] = useState({
     autosize: true,
@@ -25,10 +18,10 @@ const GraphComponent = ({
     const fetchData = async () => {
       try {
         let url;
-        if (selectedViewType === 'Monthly') {
-          url = `http://127.0.0.1:5000/get_graph?year=${selectedYear}&month=${selectedMonth}&data_type=${selectedDataType}`;
+        if (viewType === 'Monthly') {
+          url = `http://127.0.0.1:5000/get_graph?year=${year}&month=${month}&data_type=${dataType}`;
         } else {
-          url = `http://127.0.0.1:5000/get_graph_for_day?year=${selectedYear}&month=${selectedMonth}&day=${selectedDay}&data_type=${selectedDataType}`;
+          url = `http://127.0.0.1:5000/get_graph_for_day?year=${year}&month=${month}&day=${day}&data_type=${dataType}`;
         }
 
         const response = await fetch(url);
@@ -46,7 +39,7 @@ const GraphComponent = ({
     };
 
     fetchData();
-  }, [selectedYear, selectedMonth, selectedDay, selectedViewType, selectedDataType]);
+  }, [year, month, day, viewType, dataType]); // Dependencies based on props
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
