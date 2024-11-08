@@ -105,7 +105,7 @@ function Home() {
                 <OpenButton /> {/* OpenButton for navigation */}
               </div>
               <div className="image-container">
-                <GraphComponent year={2023} month={10} day={1} viewType="Daily" dataType="Both" showSelectors={false} />
+                <GraphComponent/>
               </div>
             </div>
           </div>
@@ -216,11 +216,6 @@ function NewView() {
                 <div className="text-gray-600 font-semibold mb-2">Kävijät</div>
                 <div className="h-64">
                   <GraphComponent
-                    year={chart.year}
-                    month={chart.month}
-                    day={chart.day}
-                    viewType={chart.viewType}
-                    dataType={chart.dataType}
                   />
                 </div>
               </div>

@@ -19,9 +19,9 @@ const GraphComponent = ({
       try {
         let url;
         if (viewType === 'Monthly') {
-          url = `http://127.0.0.1:5000/get_graph?year=${year}&month=${month}&data_type=${dataType}`;
+          url = `http://192.168.1.83:5000/get_graph?start_date=2023-10-05%2000:00&end_date=2023-10-09%2023:59&data_types=rain&aggregation_type=weekly`;
         } else {
-          url = `http://127.0.0.1:5000/get_graph_for_day?year=${year}&month=${month}&day=${day}&data_type=${dataType}`;
+          url = `http://192.168.1.83:5000/get_graph?start_date=2023-10-05%2000:00&end_date=2023-10-09%2023:59&data_types=rain&aggregation_type=weekly`;
         }
 
         const response = await fetch(url);
