@@ -1,8 +1,8 @@
 import './App.css'; // Import the same CSS file
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
-import myImage from './assets/graph.png'; // Adjust the path to your graph image file
-import logo from './assets/korkeasaari.png'; // Adjust the path to your logo file
-import graph from './assets/graph_output.png'; // Adjust the path to your logo file
+import myImage from './assets/graph.png';
+import logo from './assets/korkeasaari.png';
+import graph from './assets/graph_output.png';
 import GraphComponent from './components/GraphComponent';
 import { useState } from 'react';
 
@@ -36,7 +36,7 @@ function LoadGraphButton() {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(); // Navigate nowhere
+    navigate(); // Placeholder for future functionality
   };
 
   return (
@@ -61,7 +61,7 @@ function HomeButton() {
   );
 }
 
-// Home component  own layout
+// Home component
 function Home() {
   return (
     <div className="App">
@@ -70,7 +70,6 @@ function Home() {
           <img src={logo} alt="Logo" className="logo" />
         </div>
         <div className="container">
-          {/* Left side */}
           <div className="left-side">
             <div className="top-boxes">
               <div className="box box1">
@@ -105,12 +104,11 @@ function Home() {
                 <OpenButton /> {/* OpenButton for navigation */}
               </div>
               <div className="image-container">
-                <GraphComponent/>
+                <GraphComponent year={2023} month={10} day={5} viewType="Monthly" dataType="Rain" />
               </div>
             </div>
           </div>
 
-          {/* Right side */}
           <div className="right-side">
             <div className="box box4">
               <div className="box-header">
@@ -118,7 +116,7 @@ function Home() {
                   Kävijä ennuste
                   <div className="box-subcontent">Vko, Pvm</div>
                 </div>
-                <OpenButton /> {/* OpenButton for navigation */}
+                <OpenButton />
               </div>
               <div className="box-content">
                 <div className="section">1321</div>
@@ -170,7 +168,6 @@ function NewView() {
       <header className="w-full max-w-4xl flex flex-col items-center py-8">
         <img src={logo} alt="Logo" className="w-64 mb-8" />
         
-        {/* Chart and Selector Pairs */}
         <div className="w-full flex flex-col items-center space-y-6">
           {charts.map((chart) => (
             <div
@@ -184,11 +181,9 @@ function NewView() {
                 ✖
               </button>
 
-              {/* Selector Section */}
               <div className="flex flex-col w-1/3 pr-6 border-r border-gray-200 space-y-3">
                 <div className="text-gray-600 font-semibold">Valitse vaihtoehto</div>
 
-                {/* Selector Options */}
                 {['year', 'month', 'day', 'viewType', 'dataType'].map((field, idx) => (
                   <div key={idx}>
                     <label htmlFor={`${field}-select-${chart.id}`} className="block text-sm font-medium text-gray-700">
@@ -200,7 +195,6 @@ function NewView() {
                       value={chart[field]}
                       onChange={(e) => handleInputChange(chart.id, field, e.target.value)}
                     >
-                      {/* Render select options based on field */}
                       {field === 'year' && ['2024', '2023', '2022'].map((y) => <option key={y} value={y}>{y}</option>)}
                       {field === 'month' && ['1', '2', '3'].map((m) => <option key={m} value={m}>{m}</option>)}
                       {field === 'day' && ['1', '2', '3'].map((d) => <option key={d} value={d}>{d}</option>)}
@@ -211,11 +205,15 @@ function NewView() {
                 ))}
               </div>
 
-              {/* Chart Section */}
               <div className="flex-grow pl-6">
                 <div className="text-gray-600 font-semibold mb-2">Kävijät</div>
                 <div className="h-64">
                   <GraphComponent
+                    year={chart.year}
+                    month={chart.month}
+                    day={chart.day}
+                    viewType={chart.viewType}
+                    dataType={chart.dataType}
                   />
                 </div>
               </div>
@@ -223,7 +221,6 @@ function NewView() {
           ))}
         </div>
 
-        {/* Centered Add Chart Button below all charts */}
         <button
           onClick={addChart}
           className="mt-8 w-40 bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
@@ -234,5 +231,6 @@ function NewView() {
     </div>
   );
 }
+
 
 export default App;

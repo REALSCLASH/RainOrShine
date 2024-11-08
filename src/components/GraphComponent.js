@@ -15,30 +15,44 @@ const GraphComponent = ({
   });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchGraph = async () => {
       try {
-        let url;
-        if (viewType === 'Monthly') {
-          url = `http://192.168.1.83:5000/get_graph?start_date=2023-10-05%2000:00&end_date=2023-10-09%2023:59&data_types=rain&aggregation_type=weekly`;
-        } else {
-          url = `http://192.168.1.83:5000/get_graph?start_date=2023-10-05%2000:00&end_date=2023-10-09%2023:59&data_types=rain&aggregation_type=weekly`;
-        }
+        // Ensure 'visitors' is always included in data types
+        const selectedDataTypes = [dataType ? dataType.toLowerCase() : 'rain', 'visitors'].join(',');
 
+        // Format start and end dates
+        const startDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} 00:00`;
+        const endDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} 23:59`;
+
+        // Set aggregation type based on viewType
+        const aggregationType = viewType === 'Monthly' ? 'monthly' : 'daily';
+
+        // Create the URL
+        const url = new URL('http://192.168.1.83:5000/get_graph');
+        url.searchParams.append('start_date', startDate);
+        url.searchParams.append('end_date', endDate);
+        url.searchParams.append('data_types', selectedDataTypes);
+        url.searchParams.append('aggregation_type', aggregationType);
+
+        // Fetch data from the backend
         const response = await fetch(url);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
         
+        const data = await response.json();
+
+        // Set graph data and layout from backend response
         setGraphData(data.data || []);
         setLayout((prevLayout) => ({
           ...prevLayout,
-          title: data.layout?.title || 'Default Graph',
+          ...data.layout,
+          title: data.layout?.title || 'Graph Data',
         }));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
-    fetchData();
+    fetchGraph();
   }, [year, month, day, viewType, dataType]); // Dependencies based on props
 
   return (
