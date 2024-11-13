@@ -14,7 +14,7 @@ const GraphComponent = ({
   });
 
   const fetchData = async () => {
-    const url = new URL('http://127.0.0.83:5000/get_graph');
+    const url = new URL('http://127.0.0.1:5000/get_graph');
     url.searchParams.append('start_date', startDate);
     url.searchParams.append('end_date', endDate);
     dataTypes.forEach((type) => url.searchParams.append('data_types', type));
