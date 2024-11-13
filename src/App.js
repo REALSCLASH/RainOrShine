@@ -7,6 +7,7 @@ import GraphComponent from './components/GraphComponent';
 import { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import DataFetcher from './components/DataFetcher'; // Adjust the import path as needed
 
 function App() {
   return (
@@ -34,17 +35,13 @@ function OpenButton() {
   );
 }
 
-// Home component
 function Home() {
-  const sday = '2023-10-05';
-  const eday = '2023-10-09';
-  const dtype = ['temperature', 'rain'];
+  const sday = '2024-07-15';
+  const eday = '2024-07-15';
   const atype = 'weekly';
-  const [fetchTrigger, setFetchTrigger] = useState(false);
-
-  useEffect(() => {
-    setFetchTrigger(true);
-  }, []);
+  const lastsday = '2024-07-15';
+  const lasteday = '2024-07-21';
+  const lastatype = 'weekly';
 
   return (
     <div className="App">
@@ -62,7 +59,14 @@ function Home() {
                     <div className="box-subcontent">Vko, Pvm</div>
                   </div>
                 </div>
-                <div className="box-content">2132</div>
+                <div className="box-content">
+                  <DataFetcher
+                    startDate={sday}
+                    endDate={eday}
+                    dataType="visitors"
+                    aggregationType={atype}
+                  />
+                </div>
               </div>
               <div className="box box2">
                 <div className="box-header">
@@ -72,9 +76,33 @@ function Home() {
                   </div>
                 </div>
                 <div className="box-content">
-                  <div className="section">Tuuli</div>
-                  <div className="section">Lämpö</div>
-                  <div className="section">Sade</div>
+                  <div className="section">
+                    Tuuli
+                    <DataFetcher
+                      startDate={sday}
+                      endDate={eday}
+                      dataType="windspeed"
+                      aggregationType={atype}
+                    />
+                  </div>
+                  <div className="section">
+                    Lämpö
+                    <DataFetcher
+                      startDate={sday}
+                      endDate={eday}
+                      dataType="temperature"
+                      aggregationType={atype}
+                    />
+                  </div>
+                  <div className="section">
+                    Sade
+                    <DataFetcher
+                      startDate={sday}
+                      endDate={eday}
+                      dataType="rain"
+                      aggregationType={atype}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -88,11 +116,11 @@ function Home() {
               </div>
               <div className="image-container">
                 <GraphComponent
-                  startDate={sday}
-                  endDate={eday}
-                  dataTypes={dtype}
-                  aggregationType={atype}
-                  fetchTrigger={fetchTrigger}
+                  startDate={lastsday}
+                  endDate={lasteday}
+                  dataTypes={['temperature', 'rain']}
+                  aggregationType={lastatype}
+                  fetchTrigger={true}
                 />
               </div>
             </div>
@@ -130,12 +158,11 @@ function Home() {
   );
 }
 
-
 function NewView() {
   const [charts, setCharts] = useState([
     {
       id: 1,
-      startDate: '2023-10-01',
+      startDate: '2023-10-03',
       endDate: '2023-10-09',
       dataType: 'temperature',
       aggregationType: 'weekly',
@@ -149,7 +176,7 @@ function NewView() {
       ...charts,
       {
         id: newId,
-        startDate: '2023-10-01',
+        startDate: '2023-10-03',
         endDate: '2023-10-09',
         dataType: 'temperature',
         aggregationType: 'weekly',
