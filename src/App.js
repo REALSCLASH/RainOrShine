@@ -4,7 +4,9 @@ import myImage from './assets/graph.png';
 import logo from './assets/korkeasaari.png';
 import graph from './assets/graph_output.png';
 import GraphComponent from './components/GraphComponent';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 function App() {
   return (
@@ -32,37 +34,18 @@ function OpenButton() {
   );
 }
 
-function LoadGraphButton() {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(); // Placeholder for future functionality
-  };
-
-  return (
-    <button className="graph-button" onClick={handleClick}>
-      Lataa
-    </button>
-  );
-}
-
-// Home button component that navigates back to Home
-function HomeButton() {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate('/'); // Navigate back to the home view when the button is clicked
-  };
-
-  return (
-    <button className="home-button" onClick={handleClick}>
-      Takaisin
-    </button>
-  );
-}
-
 // Home component
 function Home() {
+  const sday = '2023-10-05';
+  const eday = '2023-10-09';
+  const dtype = ['temperature', 'rain'];
+  const atype = 'weekly';
+  const [fetchTrigger, setFetchTrigger] = useState(false);
+
+  useEffect(() => {
+    setFetchTrigger(true);
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -104,7 +87,13 @@ function Home() {
                 <OpenButton /> {/* OpenButton for navigation */}
               </div>
               <div className="image-container">
-                <GraphComponent year={2023} month={10} day={5} viewType="Monthly" dataType="Rain" />
+                <GraphComponent
+                  startDate={sday}
+                  endDate={eday}
+                  dataTypes={dtype}
+                  aggregationType={atype}
+                  fetchTrigger={fetchTrigger}
+                />
               </div>
             </div>
           </div>
@@ -141,14 +130,32 @@ function Home() {
   );
 }
 
+
 function NewView() {
   const [charts, setCharts] = useState([
-    { id: 1, year: 2023, month: 10, day: 1, viewType: 'Daily', dataType: 'Both' },
+    {
+      id: 1,
+      startDate: '2023-10-01',
+      endDate: '2023-10-09',
+      dataType: 'temperature',
+      aggregationType: 'weekly',
+      fetchTrigger: false,
+    },
   ]);
 
   const addChart = () => {
     const newId = charts.length ? charts[charts.length - 1].id + 1 : 1;
-    setCharts([...charts, { id: newId, year: 2023, month: 10, day: 1, viewType: 'Daily', dataType: 'Both' }]);
+    setCharts([
+      ...charts,
+      {
+        id: newId,
+        startDate: '2023-10-01',
+        endDate: '2023-10-09',
+        dataType: 'temperature',
+        aggregationType: 'weekly',
+        fetchTrigger: false,
+      },
+    ]);
   };
 
   const removeChart = (id) => {
@@ -163,11 +170,19 @@ function NewView() {
     );
   };
 
+  const triggerFetch = (id) => {
+    setCharts((prevCharts) =>
+      prevCharts.map((chart) =>
+        chart.id === id ? { ...chart, fetchTrigger: !chart.fetchTrigger } : chart
+      )
+    );
+  };
+
   return (
     <div className="new-view min-h-screen bg-gray-100 flex flex-col items-center">
       <header className="w-full max-w-4xl flex flex-col items-center py-8">
         <img src={logo} alt="Logo" className="w-64 mb-8" />
-        
+
         <div className="w-full flex flex-col items-center space-y-6">
           {charts.map((chart) => (
             <div
@@ -182,40 +197,59 @@ function NewView() {
               </button>
 
               <div className="flex flex-col w-1/3 pr-6 border-r border-gray-200 space-y-3">
-                <div className="text-gray-600 font-semibold">Valitse vaihtoehto</div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Start Date:</label>
+                  <DatePicker
+                    selected={new Date(chart.startDate)}
+                    onChange={(date) =>
+                      handleInputChange(chart.id, 'startDate', date.toISOString().slice(0, 10))
+                    }
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  />
+                </div>
 
-                {['year', 'month', 'day', 'viewType', 'dataType'].map((field, idx) => (
-                  <div key={idx}>
-                    <label htmlFor={`${field}-select-${chart.id}`} className="block text-sm font-medium text-gray-700">
-                      {field.charAt(0).toUpperCase() + field.slice(1)}:
-                    </label>
-                    <select
-                      id={`${field}-select-${chart.id}`}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      value={chart[field]}
-                      onChange={(e) => handleInputChange(chart.id, field, e.target.value)}
-                    >
-                      {field === 'year' && ['2024', '2023', '2022'].map((y) => <option key={y} value={y}>{y}</option>)}
-                      {field === 'month' && ['1', '2', '3'].map((m) => <option key={m} value={m}>{m}</option>)}
-                      {field === 'day' && ['1', '2', '3'].map((d) => <option key={d} value={d}>{d}</option>)}
-                      {field === 'viewType' && ['Daily', 'Monthly'].map((v) => <option key={v} value={v}>{v}</option>)}
-                      {field === 'dataType' && ['Both', 'Wind', 'Temperature'].map((d) => <option key={d} value={d}>{d}</option>)}
-                    </select>
-                  </div>
-                ))}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">End Date:</label>
+                  <DatePicker
+                    selected={new Date(chart.endDate)}
+                    onChange={(date) =>
+                      handleInputChange(chart.id, 'endDate', date.toISOString().slice(0, 10))
+                    }
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Data Type:</label>
+                  <select
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={chart.dataType}
+                    onChange={(e) => handleInputChange(chart.id, 'dataType', e.target.value)}
+                  >
+                    {['temperature', 'windspeed', 'rain'].map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <button
+                  onClick={() => triggerFetch(chart.id)}
+                  className="mt-4 w-full bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
+                >
+                  Fetch Graph
+                </button>
               </div>
 
               <div className="flex-grow pl-6">
-                <div className="text-gray-600 font-semibold mb-2">Kävijät</div>
-                <div className="h-64">
-                  <GraphComponent
-                    year={chart.year}
-                    month={chart.month}
-                    day={chart.day}
-                    viewType={chart.viewType}
-                    dataType={chart.dataType}
-                  />
-                </div>
+                <GraphComponent
+                  startDate={chart.startDate}
+                  endDate={chart.endDate}
+                  dataTypes={[chart.dataType]}
+                  aggregationType={chart.aggregationType}
+                  fetchTrigger={chart.fetchTrigger}
+                />
               </div>
             </div>
           ))}
@@ -231,6 +265,4 @@ function NewView() {
     </div>
   );
 }
-
-
 export default App;
