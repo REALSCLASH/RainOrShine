@@ -130,7 +130,7 @@ function Home() {
             <div className="box box4">
               <div className="box-header">
                 <div>
-                  Kävijä ennuste
+                  Kävijäennuste
                   <div className="box-subcontent">Vko, Pvm</div>
                 </div>
                 <OpenButton />
@@ -145,7 +145,7 @@ function Home() {
             <div className="box box5">
               <div className="box-header">
                 <div>
-                  Sää tiedot
+                  Säätiedot
                   <div className="box-subcontent">Vko, Pvm</div>
                 </div>
               </div>
