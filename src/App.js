@@ -34,6 +34,24 @@ function OpenButton() {
   );
 }
 
+// GoBack button component that navigates to the home page
+function GoBack() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/'); // Navigate to the home page ("/") when the button is clicked
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className="absolute top-8 left-8 w-40 bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
+    >
+      Back
+    </button>
+  );
+}
+
 // Home component
 function Home() {
   const sday = '2023-10-05';
@@ -130,7 +148,6 @@ function Home() {
   );
 }
 
-
 function NewView() {
   const [charts, setCharts] = useState([
     {
@@ -183,6 +200,8 @@ function NewView() {
       <header className="w-full max-w-4xl flex flex-col items-center py-8">
         <img src={logo} alt="Logo" className="w-64 mb-8" />
 
+        <GoBack /> {/* GoBack button for navigation */}
+
         <div className="w-full flex flex-col items-center space-y-6">
           {charts.map((chart) => (
             <div
@@ -226,23 +245,38 @@ function NewView() {
                     value={chart.dataType}
                     onChange={(e) => handleInputChange(chart.id, 'dataType', e.target.value)}
                   >
-                    {['temperature', 'windspeed', 'rain'].map((type) => (
-                      <option key={type} value={type}>
-                        {type}
-                      </option>
-                    ))}
+                    <option value="temperature">Temperature</option>
+                    <option value="rain">Rain</option>
+                    {/* Add more options if needed */}
                   </select>
                 </div>
 
-                <button
-                  onClick={() => triggerFetch(chart.id)}
-                  className="mt-4 w-full bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
-                >
-                  Fetch Graph
-                </button>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Aggregation Type:</label>
+                  <select
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={chart.aggregationType}
+                    onChange={(e) =>
+                      handleInputChange(chart.id, 'aggregationType', e.target.value)
+                    }
+                  >
+                    <option value="weekly">Weekly</option>
+                    <option value="daily">Daily</option>
+                    {/* Add more options if needed */}
+                  </select>
+                </div>
+
+                <div className="flex flex-row items-center mt-4">
+                  <button
+                    onClick={() => triggerFetch(chart.id)}
+                    className="w-full bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
+                  >
+                    {chart.fetchTrigger ? 'Stop Fetching' : 'Start Fetching'}
+                  </button>
+                </div>
               </div>
 
-              <div className="flex-grow pl-6">
+              <div className="w-2/3 pl-6">
                 <GraphComponent
                   startDate={chart.startDate}
                   endDate={chart.endDate}
@@ -253,16 +287,17 @@ function NewView() {
               </div>
             </div>
           ))}
-        </div>
 
-        <button
-          onClick={addChart}
-          className="mt-8 w-40 bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
-        >
-          Add Chart
-        </button>
+          <button
+            onClick={addChart}
+            className="mt-8 w-40 bg-green-500 text-white rounded-lg py-2 hover:bg-green-600 transition"
+          >
+            Add Chart
+          </button>
+        </div>
       </header>
     </div>
   );
 }
+
 export default App;
