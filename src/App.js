@@ -34,6 +34,22 @@ function OpenButton() {
     </button>
   );
 }
+function GoBack() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/'); // Navigate to the home page ("/") when the button is clicked
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className="absolute top-8 left-8 w-40 bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
+    >
+      Back
+    </button>
+  );
+}
 
 function Home() {
   const sday = '2024-07-15';
