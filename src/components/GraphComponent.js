@@ -3,9 +3,9 @@ import Plot from 'react-plotly.js';
 
 const GraphComponent = ({
   startDate = '2023-10-05',
-  endDate = '2023-10-09',
+  endDate = '2023-10-05',
   dataTypes = ['temperature'],
-  aggregationType = 'weekly',
+  aggregationType = 'daily',
   fetchTrigger = false,  // New prop to control fetch trigger
 }) => {
   const [graphData, setGraphData] = useState([]);
