@@ -210,6 +210,8 @@ function NewView() {
       <header className="w-full max-w-4xl flex flex-col items-center py-8">
         <img src={logo} alt="Logo" className="w-64 mb-8" />
 
+        <GoBack /> {/* GoBack button for navigation */}
+
         <div className="w-full flex flex-col items-center space-y-6">
           {charts.map((chart) => (
             <div
@@ -261,15 +263,17 @@ function NewView() {
                   </select>
                 </div>
 
-                <button
-                  onClick={() => triggerFetch(chart.id)}
-                  className="mt-4 w-full bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
-                >
-                  Fetch Graph
-                </button>
+                <div className="flex flex-row items-center mt-4">
+                  <button
+                    onClick={() => triggerFetch(chart.id)}
+                    className="w-full bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
+                  >
+                    {chart.fetchTrigger ? 'Stop Fetching' : 'Start Fetching'}
+                  </button>
+                </div>
               </div>
 
-              <div className="flex-grow pl-6">
+              <div className="w-2/3 pl-6">
                 <GraphComponent
                   startDate={chart.startDate}
                   endDate={chart.endDate}
@@ -280,16 +284,17 @@ function NewView() {
               </div>
             </div>
           ))}
-        </div>
 
-        <button
-          onClick={addChart}
-          className="mt-8 w-40 bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
-        >
-          Add Chart
-        </button>
+          <button
+            onClick={addChart}
+            className="mt-8 w-40 bg-green-500 text-white rounded-lg py-2 hover:bg-green-600 transition"
+          >
+            Add Chart
+          </button>
+        </div>
       </header>
     </div>
   );
 }
+
 export default App;

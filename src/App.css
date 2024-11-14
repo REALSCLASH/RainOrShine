@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box; /* Ensure padding and border are included in the element's total width */
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .App {
@@ -29,7 +29,8 @@
   border-radius: 8px;
 }
 
-.box-content, .box-contentNew {
+.box-content,
+.box-contentNew {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,11 +47,12 @@
   flex-direction: row;
   justify-content: space-between;
   width: 90vw; /* Reduce width to allow space on the left and right */
-  margin: 0 auto; /* Center the container */
   padding: 20px;
+  margin: 0 auto; /* Center horizontally */
 }
 
-.left-side, .right-side {
+.left-side,
+.right-side {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -62,11 +64,12 @@
   gap: 20px;
 }
 
-.box, .wide-box {
+.box,
+.wide-box {
   background-color: rgb(255, 255, 255);
   border: 1px solid rgb(170, 170, 170);
   padding: 0;
-  margin: 20px 0; /* Remove side margin and apply only vertical margin */
+  margin: 10px 0; /* Remove side margin and apply only vertical margin */
   flex-grow: 1;
   border-radius: 3px;
 }
@@ -77,7 +80,7 @@
 }
 
 .wide-box {
-  height: 300px; /* Keep this height for the wide box */
+  height: 500px; /* Keep this height for the wide box */
   width: 100%; /* Make the wide box responsive */
   margin: 10px 0; /* Add margin for spacing */
   overflow: hidden; /* Hide any overflow */
@@ -100,7 +103,7 @@
 }
 
 .right-side {
-  padding-left: 70px; /* Add padding to the left side of the right-side container */
+  padding-left: 30px; /* Add padding to the left side of the right-side container */
 }
 
 .right-side .box {
@@ -110,11 +113,15 @@
 }
 
 .box-header {
-  background-color: rgb(187, 187, 187); /* Different background color for the text section */
+  background-color: rgb(
+    187,
+    187,
+    187
+  ); /* Different background color for the text section */
   padding: 10px;
   border-bottom: 1px solid rgb(170, 170, 170);
   text-align: left; /* Align text to the left */
-  font-weight: bold; 
+  font-weight: bold;
 }
 
 .box-subcontent {
@@ -124,26 +131,24 @@
 }
 
 .box-content {
-  padding: 10px;
   display: flex; /* Enable flexbox layout */
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
   height: calc(100% - 70px); /* Adjust height to fit within the box */
 }
 
-.box1 {}
+.box1 {
+}
 
 .box1 .box-content {
   font-size: 70px; /* Adjust the size as needed */
   color: #555;
-  font-weight: 600; 
+  font-weight: 600;
 }
 
 .box2 .box-content,
 .box4 .box-content {
   flex: 1; /* Allow each section to take equal width */
-  padding: 10px; /* Add some padding inside each section */
-  margin: 0 5px; /* Optional: Add horizontal spacing between sections */
   gap: 30px; /* Set space between sections */
 }
 
@@ -151,7 +156,11 @@
   display: flex; /* Use flexbox layout */
   justify-content: space-between; /* Space between elements */
   align-items: center; /* Center items vertically */
-  background-color: rgb(187, 187, 187); /* Different background color for the text section */
+  background-color: rgb(
+    187,
+    187,
+    187
+  ); /* Different background color for the text section */
   padding: 10px;
   border-bottom: 1px solid rgb(170, 170, 170);
   text-align: left; /* Align text to the left */
@@ -199,7 +208,8 @@
     gap: 10px; /* Reduce gap between boxes */
   }
 
-  .box, .wide-box {
+  .box,
+  .wide-box {
     width: 100%; /* Full width for boxes on small screens */
     margin: 10px 0; /* Reduce margins on smaller screens */
   }
@@ -224,25 +234,21 @@
   }
 }
 
-
-
-
 /* Specific styles for NewView */
 .left-side {
-  flex: 1;
   margin-right: 20px;
 }
 
 .right-side {
   flex: 2;
-  height: 500px;
+  height: auto;
   width: 600px;
 }
 .right-side .boxNew {
-    height: auto;
-    flex-grow: 1;
-    width: 800px;
-    margin-top: 20px;
+  height: auto;
+  flex-grow: 1;
+  width: 800px;
+  margin-top: 20px;
 }
 
 /* Same button style */
