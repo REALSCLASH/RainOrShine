@@ -57,18 +57,15 @@ function GoBack() {
 }
 
 function Home() {
-  const today = new Date();
-  const lastWeek = new Date(today);
-  lastWeek.setDate(today.getDate() - 6);
+  const [fetchTrigger, setFetchTrigger] = useState(false);
 
-  const formatDate = (date) => date.toISOString().slice(0, 10);
+  // Get today's date in the format 'YYYY-MM-DD'
+  const today = new Date().toISOString().split("T")[0];
 
-  const sday = formatDate(today);
-  const eday = formatDate(today);
-  const atype = "weekly";
-  const lastsday = formatDate(lastWeek);
-  const lasteday = formatDate(today);
-  const lastatype = "weekly";
+  // Trigger fetch when the component mounts
+  useEffect(() => {
+    setFetchTrigger(true);
+  }, []);
 
   return (
     <div className="App">
@@ -88,10 +85,9 @@ function Home() {
                 </div>
                 <div className="box-content">
                   <DataFetcher
-                    startDate={sday}
-                    endDate={eday}
+                    startDate={today}
+                    endDate={today}
                     dataType="visitors"
-                    aggregationType={atype}
                   />
                 </div>
               </div>
@@ -106,28 +102,25 @@ function Home() {
                   <div className="section">
                     Tuuli
                     <DataFetcher
-                      startDate={sday}
-                      endDate={eday}
+                      startDate={today}
+                      endDate={today}
                       dataType="windspeed"
-                      aggregationType={atype}
                     />
                   </div>
                   <div className="section">
                     Lämpö
                     <DataFetcher
-                      startDate={sday}
-                      endDate={eday}
+                      startDate={today}
+                      endDate={today}
                       dataType="temperature"
-                      aggregationType={atype}
                     />
                   </div>
                   <div className="section">
                     Sade
                     <DataFetcher
-                      startDate={sday}
-                      endDate={eday}
+                      startDate={today}
+                      endDate={today}
                       dataType="rain"
-                      aggregationType={atype}
                     />
                   </div>
                 </div>
@@ -143,11 +136,10 @@ function Home() {
               </div>
               <div className="image-container">
                 <GraphComponent
-                  startDate={lastsday}
-                  endDate={lasteday}
-                  dataTypes={["temperature", "rain"]}
-                  aggregationType={lastatype}
-                  fetchTrigger={true}
+                  startDate={today}
+                  endDate={today}
+                  dataTypes={["temperature", "rain", "windspeed"]}
+                  fetchTrigger={fetchTrigger}
                   onFetchComplete={() => {}}
                 />
               </div>
@@ -202,9 +194,13 @@ function NewView() {
       startDate: defaultStartDate,
       endDate: defaultEndDate,
       dataType: ["temperature"],
-      aggregationType: "weekly",
       fetchTrigger: false,
       isLoading: false,
+      isSingleDay: false,
+      showData: false,
+      displayStartDate: defaultStartDate,
+      displayEndDate: defaultEndDate,
+      displayDataTypes: ["temperature"],
     },
   ]);
   const [isFetching, setIsFetching] = useState(false);
@@ -218,9 +214,13 @@ function NewView() {
         startDate: defaultStartDate,
         endDate: defaultEndDate,
         dataType: ["temperature"],
-        aggregationType: "weekly",
         fetchTrigger: false,
         isLoading: false,
+        isSingleDay: false,
+        showData: false,
+        displayStartDate: defaultStartDate,
+        displayEndDate: defaultEndDate,
+        displayDataTypes: ["temperature"],
       },
     ]);
   };
@@ -232,7 +232,9 @@ function NewView() {
   const handleInputChange = (id, field, value) => {
     setCharts((prevCharts) =>
       prevCharts.map((chart) =>
-        chart.id === id ? { ...chart, [field]: value } : chart
+        chart.id === id
+          ? { ...chart, [field]: value, fetchTrigger: false }
+          : chart
       )
     );
   };
@@ -246,6 +248,7 @@ function NewView() {
               dataType: chart.dataType.includes(type)
                 ? chart.dataType.filter((t) => t !== type)
                 : [...chart.dataType, type],
+              fetchTrigger: false,
             }
           : chart
       )
@@ -257,7 +260,17 @@ function NewView() {
     setCharts((prevCharts) =>
       prevCharts.map((chart) =>
         chart.id === id
-          ? { ...chart, fetchTrigger: !chart.fetchTrigger, isLoading: true }
+          ? {
+              ...chart,
+              fetchTrigger: !chart.fetchTrigger,
+              isLoading: true,
+              showData: true,
+              displayStartDate: chart.startDate,
+              displayEndDate: chart.isSingleDay
+                ? chart.startDate
+                : chart.endDate,
+              displayDataTypes: chart.dataType,
+            }
           : { ...chart, isLoading: false }
       )
     );
@@ -274,17 +287,32 @@ function NewView() {
     );
   };
 
+  const toggleSingleDay = (id) => {
+    setCharts((prevCharts) =>
+      prevCharts.map((chart) =>
+        chart.id === id
+          ? {
+              ...chart,
+              isSingleDay: !chart.isSingleDay,
+              endDate: chart.startDate,
+              fetchTrigger: false,
+            }
+          : chart
+      )
+    );
+  };
+
   return (
     <div className="new-view min-h-screen bg-gray-100 flex flex-col items-center">
-      <header className="w-full max-w-4xl flex flex-col items-center py-8">
+      <header className="w-full max-w-6xl flex flex-col items-center py-8">
         <img src={logo} alt="Logo" className="w-64 mb-8" />
         <GoBack /> {/* GoBack button for navigation */}
         <div className="w-full flex flex-col items-center space-y-6">
           {charts.map((chart) => (
             <div
               key={chart.id}
-              className="flex flex-row w-full bg-white rounded-lg shadow-lg p-4 relative border border-gray-300"
-              style={{ minHeight: "500px" }} // Adjust this value as needed
+              className="flex flex-col w-full bg-white rounded-lg shadow-lg p-4 relative border border-gray-300"
+              style={{ height: "550px" }} // Consistent height for all chart containers
             >
               <button
                 onClick={() => removeChart(chart.id)}
@@ -293,65 +321,80 @@ function NewView() {
                 ✖
               </button>
 
-              <div className="flex flex-col w-1/3 pr-6 border-r border-gray-200 space-y-3">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Start Date:
-                  </label>
-                  <DatePicker
-                    selected={new Date(chart.startDate)}
-                    onChange={(date) =>
-                      handleInputChange(
-                        chart.id,
-                        "startDate",
-                        date.toISOString().slice(0, 10)
-                      )
-                    }
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  />
-                </div>
+              <div className="flex flex-row w-full h-full">
+                {/* Control Panel */}
+                <div className="flex flex-col w-1/3 pr-6 border-r border-gray-200 space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Single Day:
+                    </label>
+                    <input
+                      type="checkbox"
+                      checked={chart.isSingleDay}
+                      onChange={() => toggleSingleDay(chart.id)}
+                      className="mt-1"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    End Date:
-                  </label>
-                  <DatePicker
-                    selected={new Date(chart.endDate)}
-                    onChange={(date) =>
-                      handleInputChange(
-                        chart.id,
-                        "endDate",
-                        date.toISOString().slice(0, 10)
-                      )
-                    }
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Start Date:
+                    </label>
+                    <DatePicker
+                      selected={new Date(chart.startDate)}
+                      onChange={(date) =>
+                        handleInputChange(
+                          chart.id,
+                          "startDate",
+                          date.toISOString().slice(0, 10)
+                        )
+                      }
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Data Type:
-                  </label>
-                  {["temperature", "windspeed", "rain"].map((type) => (
-                    <div key={type} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id={`${chart.id}-${type}`}
-                        checked={chart.dataType.includes(type)}
-                        onChange={() => handleCheckboxChange(chart.id, type)}
-                        className="mr-2"
-                      />
-                      <label
-                        htmlFor={`${chart.id}-${type}`}
-                        className="text-sm text-gray-700"
-                      >
-                        {type}
+                  {!chart.isSingleDay && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        End Date:
                       </label>
+                      <DatePicker
+                        selected={new Date(chart.endDate)}
+                        onChange={(date) =>
+                          handleInputChange(
+                            chart.id,
+                            "endDate",
+                            date.toISOString().slice(0, 10)
+                          )
+                        }
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      />
                     </div>
-                  ))}
-                </div>
+                  )}
 
-                <div className="flex flex-row items-center mt-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Data Type:
+                    </label>
+                    {["temperature", "windspeed", "rain"].map((type) => (
+                      <div key={type} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={`${chart.id}-${type}`}
+                          checked={chart.dataType.includes(type)}
+                          onChange={() => handleCheckboxChange(chart.id, type)}
+                          className="mr-2"
+                        />
+                        <label
+                          htmlFor={`${chart.id}-${type}`}
+                          className="text-sm text-gray-700"
+                        >
+                          {type}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+
                   <button
                     onClick={() => triggerFetch(chart.id)}
                     className="w-full bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
@@ -360,17 +403,47 @@ function NewView() {
                     {chart.isLoading ? "Loading..." : "Fetch"}
                   </button>
                 </div>
-              </div>
 
-              <div className="w-2/3 pl-6">
-                <GraphComponent
-                  startDate={chart.startDate}
-                  endDate={chart.endDate}
-                  dataTypes={chart.dataType}
-                  aggregationType={chart.aggregationType}
-                  fetchTrigger={chart.fetchTrigger}
-                  onFetchComplete={() => handleFetchComplete(chart.id)}
-                />
+                {/* Chart and Data Section */}
+                <div className="w-2/3 pl-6 flex flex-col">
+                  <div className="text-sm font-medium text-gray-700 mb-2">
+                    Showing data for {chart.displayStartDate}{" "}
+                    {chart.isSingleDay ? "" : `- ${chart.displayEndDate}`}
+                  </div>
+
+                  <div
+                    className="flex-grow bg-gray-100 rounded-lg mb-4 flex items-center justify-center"
+                    style={{ height: "250px" }} // Consistent graph height
+                  >
+                    <GraphComponent
+                      startDate={chart.displayStartDate}
+                      endDate={chart.displayEndDate}
+                      dataTypes={chart.dataType}
+                      fetchTrigger={chart.fetchTrigger}
+                      onFetchComplete={() => handleFetchComplete(chart.id)}
+                    />
+                  </div>
+
+                  <div className="flex flex-row space-x-4">
+                    {chart.displayDataTypes.map((type) => (
+                      <div
+                        key={`${chart.id}-${type}`}
+                        className="flex flex-col w-1/3 bg-gray-200 rounded-lg p-2"
+                      >
+                        <div className="text-sm font-medium text-gray-700 text-center">
+                          {type}:
+                        </div>
+                        <div className="h-12 flex items-center justify-center bg-white rounded-md">
+                          <DataFetcher
+                            startDate={chart.displayStartDate}
+                            endDate={chart.displayEndDate}
+                            dataType={type}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           ))}
@@ -378,6 +451,7 @@ function NewView() {
           <button
             onClick={addChart}
             className="mt-8 w-40 bg-green-500 text-white rounded-lg py-2 hover:bg-green-600 transition"
+            disabled={isFetching}
           >
             Add Chart
           </button>

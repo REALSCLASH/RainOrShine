@@ -1,53 +1,57 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-const DataFetcher = ({ startDate, endDate, dataType, aggregationType }) => {
+const DataFetcher = ({ startDate, endDate, dataType }) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const url = new URL('http://127.0.0.83:5000/get_graph');
-      url.searchParams.append('start_date', startDate);
-      url.searchParams.append('end_date', endDate);
-      url.searchParams.append('data_types', dataType);
-      url.searchParams.append('aggregation_type', aggregationType);
+      // Determine the correct endpoint based on the date range
+      const isSingleDay = startDate === endDate;
+      const endpoint = isSingleDay ? "get_graph_day" : "get_graph";
+      const url = new URL(`http://127.0.0.83:5000/${endpoint}`);
+      url.searchParams.append("start_date", `${startDate} 00:00`);
+      url.searchParams.append("end_date", `${endDate} 23:59`);
+      url.searchParams.append("data_types", dataType);
 
       try {
         const response = await fetch(url);
         const result = await response.json();
 
-        if (dataType.toLowerCase() === 'visitors') {
-          // Handle visitors data separately if needed
-          const visitorsData = result.data.find(item => item.name.toLowerCase() === 'visits');
+        if (dataType.toLowerCase() === "visitors") {
+          // Handle visitors data by summing up the values
+          const visitorsData = result.data.find(
+            (item) => item.name.toLowerCase() === "visits"
+          );
           if (visitorsData) {
             const total = visitorsData.y.reduce((sum, value) => sum + value, 0);
             setData(total);
           } else {
-            setData('No data available');
+            setData("No data available");
           }
         } else {
-          // Handle other data types
-          const dataset = result.data.find(item => item.name.toLowerCase() === dataType.toLowerCase());
+          // Handle weather data by calculating the average or taking the latest value
+          const dataset = result.data.find(
+            (item) => item.name.toLowerCase() === dataType.toLowerCase()
+          );
           if (dataset) {
-            const total = dataset.y.reduce((sum, value) => sum + value, 0);
-            setData(total);
+            const average =
+              dataset.y.reduce((sum, value) => sum + value, 0) /
+              dataset.y.length;
+            setData(average.toFixed(1)); // Round to one decimal place
           } else {
-            setData('No data available');
+            setData("No data available");
           }
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
-        setData('Error fetching data');
+        console.error("Error fetching data:", error);
+        setData("Error fetching data");
       }
     };
 
     fetchData();
-  }, [startDate, endDate, dataType, aggregationType]);
+  }, [startDate, endDate, dataType]);
 
-  return (
-    <div>
-      {data !== null ? data : 'Loading...'}
-    </div>
-  );
+  return <div>{data !== null ? data : "Loading..."}</div>;
 };
 
 export default DataFetcher;

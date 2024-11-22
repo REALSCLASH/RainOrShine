@@ -5,7 +5,6 @@ const GraphComponent = ({
   startDate = "2023-10-05",
   endDate = "2023-10-05",
   dataTypes = ["temperature"],
-  aggregationType = "daily",
   fetchTrigger = false, // New prop to control fetch trigger
   onFetchComplete, // Callback to notify fetch completion
 }) => {
@@ -15,13 +14,16 @@ const GraphComponent = ({
   });
 
   const fetchData = async () => {
-    const url = new URL("http://127.0.0.1:5000/get_graph");
-    url.searchParams.append("start_date", startDate);
-    url.searchParams.append("end_date", endDate);
+    // Determine the correct endpoint based on the date range
+    const isSingleDay = startDate === endDate;
+    const endpoint = isSingleDay ? "get_graph_day" : "get_graph";
+    const url = new URL(`http://127.0.0.1:5000/${endpoint}`);
+    url.searchParams.append("start_date", `${startDate} 00:00`);
+    url.searchParams.append("end_date", `${endDate} 23:59`);
     dataTypes.forEach((type) => url.searchParams.append("data_types", type));
-    url.searchParams.append("aggregation_type", aggregationType);
 
     try {
+      console.log("Fetching data from:", url);
       const response = await fetch(url);
       const data = await response.json();
       setGraphData(data.data);
@@ -30,10 +32,10 @@ const GraphComponent = ({
         ...data.layout,
         responsive: true,
       }));
-      onFetchComplete(); // Notify that fetching is complete
+      if (onFetchComplete) onFetchComplete(); // Notify that fetching is complete
     } catch (error) {
       console.error("Error fetching graph data:", error);
-      onFetchComplete(); // Ensure callback is called even on error
+      if (onFetchComplete) onFetchComplete(); // Ensure callback is called even on error
     }
   };
 
