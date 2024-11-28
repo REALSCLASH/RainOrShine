@@ -1,4 +1,9 @@
 import "./App.css"; // Import the same CSS file
+import RainIcon from './assets/icons/RainIcon.svg';
+import TemperatureIcon from './assets/icons/TemperatureIcon.svg';
+import WindIcon from './assets/icons/WindIcon.svg';
+
+
 import {
   BrowserRouter as Router,
   Route,
@@ -79,8 +84,8 @@ function Home() {
               <div className="box box1">
                 <div className="box-header">
                   <div>
-                    Visitors
-                    <div className="box-subcontent">Vko, Pvm</div>
+                    Asiakkaat
+                    <div className="box-subcontent">Tänään</div>
                   </div>
                 </div>
                 <div className="box-content">
@@ -95,12 +100,12 @@ function Home() {
                 <div className="box-header">
                   <div>
                     Sää keskiarvo
-                    <div className="box-subcontent">Vko, Pvm</div>
+                    <div className="box-subcontent">Tänään</div>
                   </div>
                 </div>
                 <div className="box-content">
                   <div className="section">
-                    Tuuli
+                  <img src={WindIcon} alt="Wind icon" style={{ width: '44px', height: '44px' }} />
                     <DataFetcher
                       startDate={today}
                       endDate={today}
@@ -108,7 +113,7 @@ function Home() {
                     />
                   </div>
                   <div className="section">
-                    Lämpö
+                  <img src={TemperatureIcon} alt="Temp icon" style={{ width: '44px', height: '44px' }} />
                     <DataFetcher
                       startDate={today}
                       endDate={today}
@@ -116,7 +121,7 @@ function Home() {
                     />
                   </div>
                   <div className="section">
-                    Sade
+                  <img src={RainIcon} alt="Rain icon" style={{ width: '44px', height: '44px' }} />
                     <DataFetcher
                       startDate={today}
                       endDate={today}
@@ -130,7 +135,7 @@ function Home() {
               <div className="box-header">
                 <div>
                   Kävijät
-                  <div className="box-subcontent">Vko, Pvm</div>
+                  <div className="box-subcontent">Tänään</div>
                 </div>
                 <OpenButton /> {/* OpenButton for navigation */}
               </div>
@@ -151,7 +156,7 @@ function Home() {
               <div className="box-header">
                 <div>
                   Kävijäennuste
-                  <div className="box-subcontent">Vko, Pvm</div>
+                  <div className="box-subcontent">Tänään</div>
                 </div>
                 <OpenButton />
               </div>

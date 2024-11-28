@@ -8,7 +8,7 @@ const DataFetcher = ({ startDate, endDate, dataType }) => {
       // Determine the correct endpoint based on the date range
       const isSingleDay = startDate === endDate;
       const endpoint = isSingleDay ? "get_graph_day" : "get_graph";
-      const url = new URL(`http://127.0.0.83:5000/${endpoint}`);
+      const url = new URL(`http://127.0.0.1:5000/${endpoint}`);
       url.searchParams.append("start_date", `${startDate} 00:00`);
       url.searchParams.append("end_date", `${endDate} 23:59`);
       url.searchParams.append("data_types", dataType);
