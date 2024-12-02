@@ -17,7 +17,9 @@ const GraphComponent = ({
     // Determine the correct endpoint based on the date range
     const isSingleDay = startDate === endDate;
     const endpoint = isSingleDay ? "get_graph_day" : "get_graph";
-    const url = new URL(`http://127.0.0.1:5000/${endpoint}`);
+    const url = new URL(
+      `https://innovation-project-rain-or-shine-backend-drgugwd9a2djcsff.northeurope-01.azurewebsites.net/${endpoint}`
+    );
     url.searchParams.append("start_date", `${startDate} 00:00`);
     url.searchParams.append("end_date", `${endDate} 23:59`);
     dataTypes.forEach((type) => url.searchParams.append("data_types", type));
