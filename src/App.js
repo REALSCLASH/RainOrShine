@@ -70,8 +70,26 @@ function Home() {
   // Trigger fetch when the component mounts
   useEffect(() => {
     setFetchTrigger(true);
-  }, []);
 
+    // Dynamically load the weather widget script
+    const scriptId = 'weatherwidget-io-js';
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = 'https://weatherwidget.io/js/widget.min.js';
+      script.async = true;
+      document.body.appendChild(script);
+
+      script.onload = () => {
+        console.log('Weather widget script loaded successfully.');
+      };
+    } else {
+      // If the script is already loaded, reinitialize the widget
+      window.__weatherwidget_init && window.__weatherwidget_init();
+    }
+  }, []);
+  
+    
   return (
     <div className="App">
       <header className="App-header">
@@ -105,7 +123,7 @@ function Home() {
                 </div>
                 <div className="box-content">
                   <div className="section">
-                  <img src={WindIcon} alt="Wind icon" style={{ width: '44px', height: '44px' }} />
+                    <img src={WindIcon} alt="Wind icon" style={{ width: '44px', height: '44px' }} />
                     <DataFetcher
                       startDate={today}
                       endDate={today}
@@ -113,7 +131,7 @@ function Home() {
                     />
                   </div>
                   <div className="section">
-                  <img src={TemperatureIcon} alt="Temp icon" style={{ width: '44px', height: '44px' }} />
+                    <img src={TemperatureIcon} alt="Temp icon" style={{ width: '44px', height: '44px' }} />
                     <DataFetcher
                       startDate={today}
                       endDate={today}
@@ -121,7 +139,7 @@ function Home() {
                     />
                   </div>
                   <div className="section">
-                  <img src={RainIcon} alt="Rain icon" style={{ width: '44px', height: '44px' }} />
+                    <img src={RainIcon} alt="Rain icon" style={{ width: '44px', height: '44px' }} />
                     <DataFetcher
                       startDate={today}
                       endDate={today}
@@ -167,6 +185,7 @@ function Home() {
                 <div className="section">Sade</div>
               </div>
             </div>
+
             <div className="box box5">
               <div className="box-header">
                 <div>
@@ -174,7 +193,20 @@ function Home() {
                   <div className="box-subcontent">Vko, Pvm</div>
                 </div>
               </div>
-              <div className="box-content">Content 5</div>
+              <div className="box-content">
+                <div id="weather-widget-container">
+                  {/* Weather widget injected here */}
+                  <a
+                    className="weatherwidget-io"
+                    href="https://forecast7.com/en/60d1724d94/helsinki/"
+                    data-label_1="HELSINKI"
+                    data-label_2="Sää"
+                    data-theme="pure"
+                  >
+                    HELSINKI Sää
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>

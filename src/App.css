@@ -296,3 +296,21 @@
 
   height: calc(100% - 70px); /* Adjust height to fit within the box */
 }
+.weatherwidget-io {
+  text-indent: 0 !important;
+}
+
+#weather-widget-container {
+  width: 100%;
+  height: auto; /* Or a value that works for your layout */
+  overflow: hidden;
+  display: block;
+  position: relative;
+}
+
+.weatherwidget-io {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: auto;
+}
