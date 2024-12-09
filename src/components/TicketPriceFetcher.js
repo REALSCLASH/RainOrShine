@@ -35,7 +35,7 @@ const TicketPriceFetcher = () => {
     return <p style={{ color: "red" }}>Error: {error}</p>;
   }
 
-  return <p>Lipun hinta tänään: {price}€</p>;
+  return <p>Ticket price today: {price}€</p>;
 };
 
 export default TicketPriceFetcher;

@@ -38,8 +38,11 @@ function OpenButton() {
   };
 
   return (
-    <button className="header-button" onClick={handleClick}>
-      Open
+    <button
+      className="mt-8 bg-blue-500 text-white rounded-lg py-2 px-9 hover:bg-blue-600 transition position:absolute right-4 top-4"
+      onClick={handleClick}
+    >
+      Browse more data
     </button>
   );
 }
@@ -86,18 +89,18 @@ function Home() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="app min-h-screen bg-gray-100 flex flex-col items-center">
       <header className="App-header">
         <GoHome />
       </header>
       <div className="container">
         <div className="left-side">
           <div className="top-boxes">
-            <div className="box box1">
+            <div className="box box1 rounded-lg shadow-lg p-4 relative border border-gray-300">
               <div className="box-header">
                 <div>
-                  Asiakkaat
-                  <div className="box-subcontent">Tänään</div>
+                  Visitors
+                  <div className="box-subcontent">Today</div>
                 </div>
               </div>
               <div className="box-content">
@@ -108,11 +111,11 @@ function Home() {
                 />
               </div>
             </div>
-            <div className="box box2">
+            <div className="box box2 rounded-lg shadow-lg p-4 relative border border-gray-300">
               <div className="box-header">
                 <div>
-                  Sää keskiarvo
-                  <div className="box-subcontent">Tänään</div>
+                  Weather average
+                  <div className="box-subcontent">Today</div>
                 </div>
               </div>
               <div className="box-content">
@@ -143,13 +146,12 @@ function Home() {
               </div>
             </div>
           </div>
-          <div className="wide-box box3">
+          <div className="wide-box box3 rounded-lg shadow-lg p-4 relative border border-gray-300">
             <div className="box-header">
               <div>
-                Kävijät
-                <div className="box-subcontent">Tänään</div>
+                Visitors
+                <div className="box-subcontent">Today</div>
               </div>
-              <OpenButton /> {/* OpenButton for navigation */}
             </div>
             <div className="image-container">
               <GraphComponent
@@ -159,27 +161,28 @@ function Home() {
                 fetchTrigger={fetchTrigger}
                 onFetchComplete={() => {}}
               />
+              <OpenButton /> {/* OpenButton for navigation */}
             </div>
           </div>
         </div>
 
         <div className="right-side">
-          <div className="box box4">
+          <div className="box box4 rounded-lg shadow-lg p-4 relative border border-gray-300">
             <div className="box-header">
               <div>
-                Dynaaminen hinta
-                <div className="box-subcontent">Tänään</div>
+                Dynamic pricing
+                <div className="box-subcontent">Today</div>
               </div>
             </div>
             <div className="box-content">
               <TicketPriceFetcher />
             </div>
           </div>
-          <div className="box box5">
+          <div className="box box5 rounded-lg shadow-lg p-4 relative border border-gray-300">
             <div className="box-header">
               <div>
-                Säätiedot
-                <div className="box-subcontent">Vko, Pvm</div>
+                Weather data
+                <div className="box-subcontent">week, day</div>
               </div>
             </div>
             <div className="box-content">
@@ -189,10 +192,10 @@ function Home() {
                   className="weatherwidget-io"
                   href="https://forecast7.com/en/60d1724d94/helsinki/"
                   data-label_1="HELSINKI"
-                  data-label_2="Sää"
+                  data-label_2="weather"
                   data-theme="pure"
                 >
-                  HELSINKI Sää
+                  Helsinki Weather
                 </a>
               </div>
             </div>
@@ -429,7 +432,7 @@ function NewView() {
 
                 <button
                   onClick={() => triggerFetch(chart.id)}
-                  className="w-full bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
+                  className="py-2 px-9 bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
                   disabled={isFetching}
                 >
                   {chart.isLoading ? "Loading..." : "Load Graph"}
@@ -460,7 +463,7 @@ function NewView() {
 
           <button
             onClick={addChart}
-            className="mt-8 w-40 bg-green-500 text-white rounded-lg py-2 hover:bg-green-600 transition"
+            className="mt-8 bg-blue-500 text-white rounded-lg py-2 px-9 hover:bg-blue-600 transition"
             disabled={isFetching}
           >
             Add Chart

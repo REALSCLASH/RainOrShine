@@ -74,7 +74,6 @@
 .box,
 .wide-box {
   background-color: rgb(255, 255, 255);
-  border: 1px solid rgb(170, 170, 170);
   padding: 0;
   margin: 10px 0; /* Remove side margin and apply only vertical margin */
   flex-grow: 1;
@@ -116,15 +115,6 @@
   flex-grow: 1;
   width: 100%;
 }
-
-.box-header {
-  background-color: rgb(187, 187, 187); /* Different background color for the text section */
-  padding: 10px;
-  border-bottom: 1px solid rgb(170, 170, 170);
-  text-align: left; /* Align text to the left */
-  font-weight: bold;
-}
-
 .box-subcontent {
   font-size: 14px; /* Adjust font size for subcontent */
   color: #555; /* A lighter color for better contrast */
@@ -142,7 +132,7 @@
 
 .box1 .box-content {
   font-size: 70px; /* Adjust the size as needed */
-  color: #555;
+  color: #000000;
   font-weight: 600;
 }
 
@@ -152,14 +142,12 @@
   gap: 30px; /* Set space between sections */
 }
 
+
 .box-header {
-  display: flex; /* Use flexbox layout */
-  justify-content: space-between; /* Space between elements */
-  align-items: center; /* Center items vertically */
-  background-color: rgb(187, 187, 187); /* Different background color for the text section */
+  background-color: rgb(214, 214, 214); /* Different background color for the text section */
   padding: 10px;
-  border-bottom: 1px solid rgb(170, 170, 170);
   text-align: left; /* Align text to the left */
+  font-weight: bold;
 }
 
 .header-button {
