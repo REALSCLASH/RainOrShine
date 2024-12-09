@@ -1,23 +1,22 @@
 import "./App.css"; // Import the same CSS file
-import RainIcon from './assets/icons/RainIcon.svg';
-import TemperatureIcon from './assets/icons/TemperatureIcon.svg';
-import WindIcon from './assets/icons/WindIcon.svg';
-
+import RainIcon from "./assets/icons/RainIcon.svg";
+import TemperatureIcon from "./assets/icons/TemperatureIcon.svg";
+import WindIcon from "./assets/icons/WindIcon.svg";
 
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   useNavigate,
+  Link,
 } from "react-router-dom";
-import myImage from "./assets/graph.png";
 import logo from "./assets/korkeasaari.png";
-import graph from "./assets/graph_output.png";
 import GraphComponent from "./components/GraphComponent";
 import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import DataFetcher from "./components/DataFetcher"; // Adjust the import path as needed
+import TicketPriceFetcher from "./components/TicketPriceFetcher";
 
 function App() {
   return (
@@ -44,7 +43,7 @@ function OpenButton() {
     </button>
   );
 }
-function GoBack() {
+function GoHome() {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -52,12 +51,9 @@ function GoBack() {
   };
 
   return (
-    <button
-      onClick={handleClick}
-      className="absolute top-8 left-8 w-40 bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
-    >
-      Back
-    </button>
+    <div className="logo-container">
+      <img src={logo} alt="Logo" className="logo" onClick={handleClick} />
+    </div>
   );
 }
 
@@ -72,145 +68,137 @@ function Home() {
     setFetchTrigger(true);
 
     // Dynamically load the weather widget script
-    const scriptId = 'weatherwidget-io-js';
+    const scriptId = "weatherwidget-io-js";
     if (!document.getElementById(scriptId)) {
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.id = scriptId;
-      script.src = 'https://weatherwidget.io/js/widget.min.js';
+      script.src = "https://weatherwidget.io/js/widget.min.js";
       script.async = true;
       document.body.appendChild(script);
 
       script.onload = () => {
-        console.log('Weather widget script loaded successfully.');
+        console.log("Weather widget script loaded successfully.");
       };
     } else {
       // If the script is already loaded, reinitialize the widget
       window.__weatherwidget_init && window.__weatherwidget_init();
     }
   }, []);
-  
-    
+
   return (
     <div className="App">
       <header className="App-header">
-        <div className="logo-container">
-          <img src={logo} alt="Logo" className="logo" />
-        </div>
-        <div className="container">
-          <div className="left-side">
-            <div className="top-boxes">
-              <div className="box box1">
-                <div className="box-header">
-                  <div>
-                    Asiakkaat
-                    <div className="box-subcontent">Tänään</div>
-                  </div>
-                </div>
-                <div className="box-content">
-                  <DataFetcher
-                    startDate={today}
-                    endDate={today}
-                    dataType="visitors"
-                  />
-                </div>
-              </div>
-              <div className="box box2">
-                <div className="box-header">
-                  <div>
-                    Sää keskiarvo
-                    <div className="box-subcontent">Tänään</div>
-                  </div>
-                </div>
-                <div className="box-content">
-                  <div className="section">
-                    <img src={WindIcon} alt="Wind icon" style={{ width: '44px', height: '44px' }} />
-                    <DataFetcher
-                      startDate={today}
-                      endDate={today}
-                      dataType="windspeed"
-                    />
-                  </div>
-                  <div className="section">
-                    <img src={TemperatureIcon} alt="Temp icon" style={{ width: '44px', height: '44px' }} />
-                    <DataFetcher
-                      startDate={today}
-                      endDate={today}
-                      dataType="temperature"
-                    />
-                  </div>
-                  <div className="section">
-                    <img src={RainIcon} alt="Rain icon" style={{ width: '44px', height: '44px' }} />
-                    <DataFetcher
-                      startDate={today}
-                      endDate={today}
-                      dataType="rain"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="wide-box box3">
+        <GoHome />
+      </header>
+      <div className="container">
+        <div className="left-side">
+          <div className="top-boxes">
+            <div className="box box1">
               <div className="box-header">
                 <div>
-                  Kävijät
+                  Asiakkaat
                   <div className="box-subcontent">Tänään</div>
                 </div>
-                <OpenButton /> {/* OpenButton for navigation */}
               </div>
-              <div className="image-container">
-                <GraphComponent
+              <div className="box-content">
+                <DataFetcher
                   startDate={today}
                   endDate={today}
-                  dataTypes={["temperature", "rain", "windspeed"]}
-                  fetchTrigger={fetchTrigger}
-                  onFetchComplete={() => {}}
+                  dataType="visitors"
                 />
               </div>
             </div>
-          </div>
-
-          <div className="right-side">
-            <div className="box box4">
+            <div className="box box2">
               <div className="box-header">
                 <div>
-                  Kävijäennuste
+                  Sää keskiarvo
                   <div className="box-subcontent">Tänään</div>
                 </div>
-                <OpenButton />
               </div>
               <div className="box-content">
-                <div className="section">1321</div>
-                <div className="section">Tuuli</div>
-                <div className="section">Lämpö</div>
-                <div className="section">Sade</div>
+                <div className="section">
+                  <img
+                    src={WindIcon}
+                    alt="Wind icon"
+                    style={{ width: "44px", height: "44px" }}
+                  />
+                  1
+                </div>
+                <div className="section">
+                  <img
+                    src={TemperatureIcon}
+                    alt="Temp icon"
+                    style={{ width: "44px", height: "44px" }}
+                  />
+                  1
+                </div>
+                <div className="section">
+                  <img
+                    src={RainIcon}
+                    alt="Rain icon"
+                    style={{ width: "44px", height: "44px" }}
+                  />
+                  1
+                </div>
               </div>
             </div>
-
-            <div className="box box5">
-              <div className="box-header">
-                <div>
-                  Säätiedot
-                  <div className="box-subcontent">Vko, Pvm</div>
-                </div>
+          </div>
+          <div className="wide-box box3">
+            <div className="box-header">
+              <div>
+                Kävijät
+                <div className="box-subcontent">Tänään</div>
               </div>
-              <div className="box-content">
-                <div id="weather-widget-container">
-                  {/* Weather widget injected here */}
-                  <a
-                    className="weatherwidget-io"
-                    href="https://forecast7.com/en/60d1724d94/helsinki/"
-                    data-label_1="HELSINKI"
-                    data-label_2="Sää"
-                    data-theme="pure"
-                  >
-                    HELSINKI Sää
-                  </a>
-                </div>
+              <OpenButton /> {/* OpenButton for navigation */}
+            </div>
+            <div className="image-container">
+              <GraphComponent
+                startDate={today}
+                endDate={today}
+                dataTypes={["temperature", "rain", "windspeed"]}
+                fetchTrigger={fetchTrigger}
+                onFetchComplete={() => {}}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="right-side">
+          <div className="box box4">
+            <div className="box-header">
+              <div>
+                Dynaaminen hinta
+                <div className="box-subcontent">Tänään</div>
+              </div>
+            </div>
+            <div className="box-content">
+              <TicketPriceFetcher />
+            </div>
+          </div>
+          <div className="box box5">
+            <div className="box-header">
+              <div>
+                Säätiedot
+                <div className="box-subcontent">Vko, Pvm</div>
+              </div>
+            </div>
+            <div className="box-content">
+              <div id="weather-widget-container">
+                {/* Weather widget injected here */}
+                <a
+                  className="weatherwidget-io"
+                  href="https://forecast7.com/en/60d1724d94/helsinki/"
+                  data-label_1="HELSINKI"
+                  data-label_2="Sää"
+                  data-theme="pure"
+                >
+                  HELSINKI Sää
+                </a>
               </div>
             </div>
           </div>
         </div>
-      </header>
+      </div>
     </div>
   );
 }
@@ -341,15 +329,16 @@ function NewView() {
 
   return (
     <div className="new-view min-h-screen bg-gray-100 flex flex-col items-center">
-      <header className="w-full max-w-6xl flex flex-col items-center py-8">
-        <img src={logo} alt="Logo" className="w-64 mb-8" />
-        <GoBack /> {/* GoBack button for navigation */}
+      <header className="App-header">
+        <GoHome />
+      </header>
+      <div className="w-full max-w-6xl flex flex-col items-center py-8">
         <div className="w-full flex flex-col items-center space-y-6">
           {charts.map((chart) => (
             <div
               key={chart.id}
-              className="flex flex-col w-full bg-white rounded-lg shadow-lg p-4 relative border border-gray-300"
-              style={{ height: "550px" }} // Consistent height for all chart containers
+              className="flex flex-col md:flex-row w-full bg-white rounded-lg shadow-lg p-4 relative border border-gray-300"
+              style={{ height: "auto" }} // Flexible height
             >
               <button
                 onClick={() => removeChart(chart.id)}
@@ -358,128 +347,112 @@ function NewView() {
                 ✖
               </button>
 
-              <div className="flex flex-row w-full h-full">
-                {/* Control Panel */}
-                <div className="flex flex-col w-1/3 pr-6 border-r border-gray-200 space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Single Day:
-                    </label>
-                    <input
-                      type="checkbox"
-                      checked={chart.isSingleDay}
-                      onChange={() => toggleSingleDay(chart.id)}
-                      className="mt-1"
-                    />
-                  </div>
+              <div className="flex flex-col md:w-1/3 w-full pr-0 md:pr-6 md:border-r border-gray-200 space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Single Day:
+                  </label>
+                  <input
+                    type="checkbox"
+                    checked={chart.isSingleDay}
+                    onChange={() => toggleSingleDay(chart.id)}
+                    className="mt-1"
+                  />
+                </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Start Date:
+                  </label>
+                  <DatePicker
+                    selected={
+                      new Date(
+                        chart.startDate || lastWeek.toISOString().slice(0, 10)
+                      )
+                    }
+                    onChange={(date) =>
+                      handleInputChange(
+                        chart.id,
+                        "startDate",
+                        date.toISOString().slice(0, 10)
+                      )
+                    }
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  />
+                </div>
+
+                {!chart.isSingleDay && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Start Date:
+                      End Date:
                     </label>
                     <DatePicker
-                      selected={new Date(chart.startDate)}
+                      selected={
+                        new Date(
+                          chart.endDate || today.toISOString().slice(0, 10)
+                        )
+                      }
                       onChange={(date) =>
                         handleInputChange(
                           chart.id,
-                          "startDate",
+                          "endDate",
                           date.toISOString().slice(0, 10)
                         )
                       }
                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
                   </div>
+                )}
 
-                  {!chart.isSingleDay && (
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        End Date:
-                      </label>
-                      <DatePicker
-                        selected={new Date(chart.endDate)}
-                        onChange={(date) =>
-                          handleInputChange(
-                            chart.id,
-                            "endDate",
-                            date.toISOString().slice(0, 10)
-                          )
-                        }
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Data Type:
+                  </label>
+                  {["temperature", "windspeed", "rain"].map((type) => (
+                    <div key={type} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id={`${chart.id}-${type}`}
+                        checked={chart.dataType.includes(type)}
+                        onChange={() => handleCheckboxChange(chart.id, type)}
+                        className="mr-2"
                       />
+                      <label
+                        htmlFor={`${chart.id}-${type}`}
+                        className="text-sm text-gray-700"
+                      >
+                        {type}
+                      </label>
                     </div>
-                  )}
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Data Type:
-                    </label>
-                    {["temperature", "windspeed", "rain"].map((type) => (
-                      <div key={type} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={`${chart.id}-${type}`}
-                          checked={chart.dataType.includes(type)}
-                          onChange={() => handleCheckboxChange(chart.id, type)}
-                          className="mr-2"
-                        />
-                        <label
-                          htmlFor={`${chart.id}-${type}`}
-                          className="text-sm text-gray-700"
-                        >
-                          {type}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-
-                  <button
-                    onClick={() => triggerFetch(chart.id)}
-                    className="w-full bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
-                    disabled={isFetching}
-                  >
-                    {chart.isLoading ? "Loading..." : "Fetch"}
-                  </button>
+                  ))}
                 </div>
 
-                {/* Chart and Data Section */}
-                <div className="w-2/3 pl-6 flex flex-col">
-                  <div className="text-sm font-medium text-gray-700 mb-2">
-                    Showing data for {chart.displayStartDate}{" "}
-                    {chart.isSingleDay ? "" : `- ${chart.displayEndDate}`}
-                  </div>
+                <button
+                  onClick={() => triggerFetch(chart.id)}
+                  className="w-full bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
+                  disabled={isFetching}
+                >
+                  {chart.isLoading ? "Loading..." : "Load Graph"}
+                </button>
+              </div>
 
-                  <div
-                    className="flex-grow bg-gray-100 rounded-lg mb-4 flex items-center justify-center"
-                    style={{ height: "250px" }} // Consistent graph height
-                  >
-                    <GraphComponent
-                      startDate={chart.displayStartDate}
-                      endDate={chart.displayEndDate}
-                      dataTypes={chart.dataType}
-                      fetchTrigger={chart.fetchTrigger}
-                      onFetchComplete={() => handleFetchComplete(chart.id)}
-                    />
-                  </div>
+              <div className="w-full md:w-2/3 pl-0 md:pl-6 flex flex-col">
+                <div className="text-sm font-medium text-gray-700 mb-2">
+                  Showing data for {chart.displayStartDate}{" "}
+                  {chart.isSingleDay ? "" : `- ${chart.displayEndDate}`}
+                </div>
 
-                  <div className="flex flex-row space-x-4">
-                    {chart.displayDataTypes.map((type) => (
-                      <div
-                        key={`${chart.id}-${type}`}
-                        className="flex flex-col w-1/3 bg-gray-200 rounded-lg p-2"
-                      >
-                        <div className="text-sm font-medium text-gray-700 text-center">
-                          {type}:
-                        </div>
-                        <div className="h-12 flex items-center justify-center bg-white rounded-md">
-                          <DataFetcher
-                            startDate={chart.displayStartDate}
-                            endDate={chart.displayEndDate}
-                            dataType={type}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                <div
+                  className="flex-grow bg-gray-100 rounded-lg mb-4 flex items-center justify-center md:min-h-[500px] lg:min-h-[550px]"
+                  style={{ height: "auto", minHeight: "420px" }}
+                >
+                  <GraphComponent
+                    startDate={chart.displayStartDate}
+                    endDate={chart.displayEndDate}
+                    dataTypes={chart.dataType}
+                    fetchTrigger={chart.fetchTrigger}
+                    onFetchComplete={() => handleFetchComplete(chart.id)}
+                  />
                 </div>
               </div>
             </div>
@@ -493,7 +466,7 @@ function NewView() {
             Add Chart
           </button>
         </div>
-      </header>
+      </div>
     </div>
   );
 }

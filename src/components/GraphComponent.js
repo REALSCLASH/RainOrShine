@@ -10,14 +10,19 @@ const GraphComponent = ({
 }) => {
   const [graphData, setGraphData] = useState([]);
   const [layout, setLayout] = useState({
+    autosize: true,
     responsive: true,
+    width: null,
+    height: null,
   });
 
   const fetchData = async () => {
     // Determine the correct endpoint based on the date range
     const isSingleDay = startDate === endDate;
     const endpoint = isSingleDay ? "get_graph_day" : "get_graph";
-    const url = new URL(`http://127.0.0.1:5000/${endpoint}`);
+    const url = new URL(
+      `https://innovation-project-rain-or-shine-backend-drgugwd9a2djcsff.northeurope-01.azurewebsites.net/${endpoint}`
+    );
     url.searchParams.append("start_date", `${startDate} 00:00`);
     url.searchParams.append("end_date", `${endDate} 23:59`);
     dataTypes.forEach((type) => url.searchParams.append("data_types", type));
@@ -30,6 +35,7 @@ const GraphComponent = ({
       setLayout((prevLayout) => ({
         ...prevLayout,
         ...data.layout,
+        autosize: true,
         responsive: true,
       }));
       if (onFetchComplete) onFetchComplete(); // Notify that fetching is complete
@@ -47,11 +53,14 @@ const GraphComponent = ({
   }, [fetchTrigger]);
 
   return (
-    <Plot
-      data={graphData}
-      layout={layout}
-      style={{ width: "100%", height: "100%" }}
-    />
+    <div className="graph-container">
+      <Plot
+        data={graphData}
+        layout={layout}
+        useResizeHandler={true}
+        style={{ width: "100%", height: "100%" }}
+      />
+    </div>
   );
 };
 

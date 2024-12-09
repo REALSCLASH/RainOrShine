@@ -11,6 +11,7 @@
   text-align: center;
   align-items: center;
 }
+
 .image-container {
   position: relative;
   width: 100%;
@@ -42,6 +43,7 @@
   width: 100%;
   height: auto;
 }
+
 .container {
   display: flex;
   flex-direction: row;
@@ -50,7 +52,12 @@
   padding: 20px;
   margin: 0 auto; /* Center horizontally */
 }
-
+.left-side {
+  width: 60%;
+}
+.right-side {
+  width: 40%;
+}
 .left-side,
 .right-side {
   display: flex;
@@ -76,7 +83,7 @@
 
 .box {
   height: 200px; /* Height for the boxes in the left side */
-  width: 300px;
+  width: 100%;
 }
 
 .wide-box {
@@ -96,28 +103,22 @@
   width: 100%;
   height: 100%;
 }
+
 .image-container img {
   max-width: 100%; /* Ensure the image does not overflow the container */
   max-height: 100%; /* Ensure the image does not exceed the height of the container */
   object-fit: cover; /* Maintain aspect ratio and fill the container */
 }
 
-.right-side {
-  padding-left: 30px; /* Add padding to the left side of the right-side container */
-}
 
 .right-side .box {
-  height: 200px; /* Set height to match content 3 */
+  height: auto; /* Set height to match content 3 */
   flex-grow: 1;
-  width: 400px;
+  width: 100%;
 }
 
 .box-header {
-  background-color: rgb(
-    187,
-    187,
-    187
-  ); /* Different background color for the text section */
+  background-color: rgb(187, 187, 187); /* Different background color for the text section */
   padding: 10px;
   border-bottom: 1px solid rgb(170, 170, 170);
   text-align: left; /* Align text to the left */
@@ -129,15 +130,14 @@
   color: #555; /* A lighter color for better contrast */
   margin-top: 1px; /* Add some space above the subcontent */
 }
-
+.left-side {
+  margin-right: 10px; /* Reduce margin */
+}
 .box-content {
   display: flex; /* Enable flexbox layout */
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
   height: calc(100% - 70px); /* Adjust height to fit within the box */
-}
-
-.box1 {
 }
 
 .box1 .box-content {
@@ -156,11 +156,7 @@
   display: flex; /* Use flexbox layout */
   justify-content: space-between; /* Space between elements */
   align-items: center; /* Center items vertically */
-  background-color: rgb(
-    187,
-    187,
-    187
-  ); /* Different background color for the text section */
+  background-color: rgb(187, 187, 187); /* Different background color for the text section */
   padding: 10px;
   border-bottom: 1px solid rgb(170, 170, 170);
   text-align: left; /* Align text to the left */
@@ -182,9 +178,9 @@
 }
 
 .logo-container {
-  position: absolute;
-  top: 20px; /* Adjust this value based on your needs */
-  left: 20px; /* Adjust this value based on your needs */
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
 }
 
 .logo {
@@ -193,11 +189,30 @@
 }
 
 .App-header {
-  padding-top: 120px; /* Create space for the logo (adjust value as needed) */
+  padding-top: 25px; /* Create space for the logo (adjust value as needed) */
 }
 
 /* Responsive layout for tablets and smaller screens */
+@media (max-width: 1400px) {
+  .right-side {
+    width: 100%;
+  }
+  .left-side {
+    width: 100%;
+  }
+  .box4 .box-content {
+    padding-top: 50px;
+    padding-top: 50px;
+  }
+  .container {
+    flex-direction: column; /* Stack the boxes vertically */
+    width: 95vw; /* Increase width slightly on smaller screens */
+  }
+}
 @media (max-width: 768px) {
+  .right-side .box {
+    width: 100%;
+  }
   .container {
     flex-direction: column; /* Stack the boxes vertically */
     width: 95vw; /* Increase width slightly on smaller screens */
@@ -213,47 +228,98 @@
     width: 100%; /* Full width for boxes on small screens */
     margin: 10px 0; /* Reduce margins on smaller screens */
   }
+}
 
-  .right-side {
-    padding-left: 20px; /* Adjust padding for smaller screens */
+.graph-container {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .graph-container {
+    height: 300px; /* Adjust height for smaller screens */
+  }
+  .left-side {
+    margin-right: 0px; /* Reduce margin */
+  }
+}
+@media (max-width: 480px) {
+  .left-side {
+    margin-right: 0px; /* Reduce margin */
   }
 }
 
 /* Mobile layout */
 @media (max-width: 480px) {
-  .box {
-    height: 150px; /* Reduce box height on mobile */
+  .container {
+    width: 100%; /* Full width for the container */
+    padding: 10px; /* Reduce padding */
+  }
+  .left-side {
+    margin-right: 0px; /* Reduce margin */
   }
 
+  .box,
   .wide-box {
-    height: 200px; /* Reduce height of the wide box */
+    height: auto; /* Adjust height for boxes */
+    margin: 5px 0; /* Reduce margins */
   }
 
-  .right-side .box {
-    height: 0px; /* Adjust height for the fifth box on mobile if needed */
+  .box-content,
+  .box-contentNew {
+    padding: 10px; /* Reduce padding */
+  }
+
+  .box-header {
+    padding: 5px; /* Reduce padding */
+  }
+
+  .header-button {
+    padding: 5px; /* Reduce padding */
+    font-size: 12px; /* Reduce font size */
+  }
+
+  .selection-box {
+    padding: 5px; /* Reduce padding */
+    font-size: 10px; /* Reduce font size */
+  }
+
+  .home-button,
+  .graph-button {
+    padding: 5px 10px; /* Reduce padding */
+    font-size: 0.8rem; /* Reduce font size */
+  }
+
+  .top-boxes {
+    gap: 5px; /* Reduce gap between boxes */
+  }
+
+  .left-side,
+  .right-side {
+    padding: 0; /* Remove padding */
   }
 }
 
-/* Specific styles for NewView */
-.left-side {
-  margin-right: 20px;
-}
 
 .right-side {
   flex: 2;
   height: auto;
-  width: 600px;
+  width: 100%; /* Make the right-side responsive */
+  margin-right: auto;
 }
+
 .right-side .boxNew {
   height: auto;
   flex-grow: 1;
-  width: 800px;
-  margin-top: 20px;
+  width: 100%; /* Make the boxNew responsive */
+  margin-top: 10px; /* Reduce margin */
 }
 
 /* Same button style */
 .home-button {
-  margin-top: 20px;
+  margin-top: 10px; /* Reduce margin */
   padding: 10px 20px;
   font-size: 1rem;
   background-color: #8c8c8c;
@@ -263,16 +329,13 @@
 }
 
 .graph-button {
-  margin-top: 20px;
+  margin-top: 10px; /* Reduce margin */
   padding: 10px 20px;
   font-size: 1rem;
   background-color: #8c8c8c;
   color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 2px;
+  border: none
 }
-
 .graph-button:hover {
   background-color: #11b03e;
 }
@@ -289,13 +352,14 @@
   font-size: 12px; /* Font size for dropdown */
   margin-bottom: 5px;
 }
+
 .box-contentNew {
   padding: 30px;
   display: flex; /* Enable flexbox layout */
   flex-direction: column;
-
   height: calc(100% - 70px); /* Adjust height to fit within the box */
 }
+
 .weatherwidget-io {
   text-indent: 0 !important;
 }
