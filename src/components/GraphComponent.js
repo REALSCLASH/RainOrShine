@@ -5,8 +5,8 @@ const GraphComponent = ({
   startDate = "2023-10-05",
   endDate = "2023-10-05",
   dataTypes = ["temperature"],
-  fetchTrigger = false, // New prop to control fetch trigger
-  onFetchComplete, // Callback to notify fetch completion
+  fetchTrigger = false,
+  onFetchComplete,
 }) => {
   const [graphData, setGraphData] = useState([]);
   const [layout, setLayout] = useState({
@@ -14,10 +14,21 @@ const GraphComponent = ({
     responsive: true,
     width: null,
     height: null,
+    hovermode: "x unified",
+    xaxis: {
+      title: "Date",
+      showspikes: true,
+      spikemode: "across",
+      spikesnap: "cursor",
+      spikecolor: "gray",
+      spikethickness: 1,
+    },
+    yaxis: {
+      title: "Value",
+    },
   });
 
   const fetchData = async () => {
-    // Determine the correct endpoint based on the date range
     const isSingleDay = startDate === endDate;
     const endpoint = isSingleDay ? "get_graph_day" : "get_graph";
     const url = new URL(
@@ -35,17 +46,16 @@ const GraphComponent = ({
       setLayout((prevLayout) => ({
         ...prevLayout,
         ...data.layout,
+        hovermode: "x unified",
         autosize: true,
         responsive: true,
       }));
-      if (onFetchComplete) onFetchComplete(); // Notify that fetching is complete
+      if (onFetchComplete) onFetchComplete();
     } catch (error) {
       console.error("Error fetching graph data:", error);
-      if (onFetchComplete) onFetchComplete(); // Ensure callback is called even on error
+      if (onFetchComplete) onFetchComplete();
     }
   };
-
-  // Use effect that listens only for the fetchTrigger change
   useEffect(() => {
     if (fetchTrigger) {
       fetchData();

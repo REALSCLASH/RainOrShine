@@ -17,41 +17,36 @@ const DataFetcher = ({ startDate, endDate, dataType }) => {
       try {
         const response = await fetch(url);
         const result = await response.json();
-        console.log("Fetched result:", result); // Log to debug structure
-
-        // Extract the dataset
-        const dataset = result.data?.[0]; // Access the first item directly
+        console.log("Fetched result:", result);
+        const dataset = result.data?.[0];
         if (dataset) {
-          console.log("Dataset found:", dataset); // Verify dataset
-
+          console.log("Dataset found:", dataset);
           if (dataType.toLowerCase() === "visitors") {
-            // Summing visitor counts
             const totalVisitors = dataset.y.reduce(
               (sum, value) => sum + value,
               0
             );
             setData(totalVisitors);
           } else {
-            // Averaging for weather-related data
             const average =
               dataset.y.reduce((sum, value) => sum + value, 0) /
               dataset.y.length;
-            setData(average.toFixed(1)); // Rounded to one decimal place
+            setData(average.toFixed(1));
           }
         } else {
           console.error("Dataset is not available in the response");
-          setData("No data available");
+          setData("Ei dataa saatavilla");
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
-        setData("Error fetching data");
+        console.error("Virhe datan hakemisessa:", error);
+        setData("Virhe datan hakemisessa");
       }
     };
 
     fetchData();
   }, [startDate, endDate, dataType]);
 
-  return <div>{data !== null ? data : "Loading..."}</div>;
+  return <div>{data !== null ? data : "Ladataan..."}</div>;
 };
 
 export default DataFetcher;

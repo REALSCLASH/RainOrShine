@@ -39,10 +39,10 @@ function OpenButton() {
 
   return (
     <button
-      className="mt-8 bg-blue-500 text-white rounded-lg py-2 px-9 hover:bg-blue-600 transition position:absolute right-4 top-4"
+      className="w-100% md:w-1/4 xb-3 mx-3 mb-3 bg-blue-500 text-white rounded-lg py-2 px-9 hover:bg-blue-600 transition"
       onClick={handleClick}
     >
-      Browse more data
+      Selaa sää dataa
     </button>
   );
 }
@@ -99,11 +99,19 @@ function Home() {
             <div className="box box1 rounded-lg shadow-lg p-4 relative border border-gray-300">
               <div className="box-header">
                 <div>
-                  Visitors
-                  <div className="box-subcontent">Today</div>
+                  Kävijät
+                  <div className="box-subcontent">Tänään</div>
                 </div>
               </div>
               <div className="box-content">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="black"
+                  className="w-16 h-16"
+                >
+                  <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v2h20v-2c0-3.33-6.67-5-10-5z" />
+                </svg>
                 <DataFetcher
                   startDate={today}
                   endDate={today}
@@ -114,43 +122,20 @@ function Home() {
             <div className="box box2 rounded-lg shadow-lg p-4 relative border border-gray-300">
               <div className="box-header">
                 <div>
-                  Weather average
-                  <div className="box-subcontent">Today</div>
+                  Dynaaminen lipun hinta
+                  <div className="box-subcontent">Tänään</div>
                 </div>
               </div>
               <div className="box-content">
-                <div className="section">
-                  <img
-                    src={WindIcon}
-                    alt="Wind icon"
-                    style={{ width: "44px", height: "44px" }}
-                  />
-                  1
-                </div>
-                <div className="section">
-                  <img
-                    src={TemperatureIcon}
-                    alt="Temp icon"
-                    style={{ width: "44px", height: "44px" }}
-                  />
-                  1
-                </div>
-                <div className="section">
-                  <img
-                    src={RainIcon}
-                    alt="Rain icon"
-                    style={{ width: "44px", height: "44px" }}
-                  />
-                  1
-                </div>
+                <TicketPriceFetcher />
               </div>
             </div>
           </div>
           <div className="wide-box box3 rounded-lg shadow-lg p-4 relative border border-gray-300">
             <div className="box-header">
               <div>
-                Visitors
-                <div className="box-subcontent">Today</div>
+                Kävijät
+                <div className="box-subcontent">Tänään</div>
               </div>
             </div>
             <div className="image-container">
@@ -161,28 +146,17 @@ function Home() {
                 fetchTrigger={fetchTrigger}
                 onFetchComplete={() => {}}
               />
-              <OpenButton /> {/* OpenButton for navigation */}
             </div>
+            <OpenButton /> {/* OpenButton for navigation */}
           </div>
         </div>
 
         <div className="right-side">
-          <div className="box box4 rounded-lg shadow-lg p-4 relative border border-gray-300">
-            <div className="box-header">
-              <div>
-                Dynamic pricing
-                <div className="box-subcontent">Today</div>
-              </div>
-            </div>
-            <div className="box-content">
-              <TicketPriceFetcher />
-            </div>
-          </div>
           <div className="box box5 rounded-lg shadow-lg p-4 relative border border-gray-300">
             <div className="box-header">
               <div>
-                Weather data
-                <div className="box-subcontent">week, day</div>
+                Sää data
+                <div className="box-subcontent">viikko, päivä</div>
               </div>
             </div>
             <div className="box-content">
@@ -192,10 +166,10 @@ function Home() {
                   className="weatherwidget-io"
                   href="https://forecast7.com/en/60d1724d94/helsinki/"
                   data-label_1="HELSINKI"
-                  data-label_2="weather"
+                  data-label_2="sää"
                   data-theme="pure"
                 >
-                  Helsinki Weather
+                  Helsinki sää
                 </a>
               </div>
             </div>
@@ -221,14 +195,14 @@ function NewView() {
       id: 1,
       startDate: defaultStartDate,
       endDate: defaultEndDate,
-      dataType: ["temperature"],
+      dataType: ["temperature", "windspeed", "rain"],
       fetchTrigger: false,
       isLoading: false,
       isSingleDay: false,
       showData: false,
       displayStartDate: defaultStartDate,
       displayEndDate: defaultEndDate,
-      displayDataTypes: ["temperature"],
+      displayDataTypes: ["temperature", "windspeed", "rain"],
     },
   ]);
   const [isFetching, setIsFetching] = useState(false);
@@ -241,14 +215,14 @@ function NewView() {
         id: newId,
         startDate: defaultStartDate,
         endDate: defaultEndDate,
-        dataType: ["temperature"],
+        dataType: ["temperature", "windspeed", "rain"],
         fetchTrigger: false,
         isLoading: false,
         isSingleDay: false,
         showData: false,
         displayStartDate: defaultStartDate,
         displayEndDate: defaultEndDate,
-        displayDataTypes: ["temperature"],
+        displayDataTypes: ["temperature", "windspeed", "rain"],
       },
     ]);
   };
@@ -340,8 +314,8 @@ function NewView() {
           {charts.map((chart) => (
             <div
               key={chart.id}
-              className="flex flex-col md:flex-row w-full bg-white rounded-lg shadow-lg p-4 relative border border-gray-300"
-              style={{ height: "auto" }} // Flexible height
+              className="flex flex-col md:flex-row w-full bg-white rounded-lg shadow-lg p-6 relative border border-gray-300"
+              style={{ minHeight: "500px" }} // Increased minimum height
             >
               <button
                 onClick={() => removeChart(chart.id)}
@@ -350,10 +324,10 @@ function NewView() {
                 ✖
               </button>
 
-              <div className="flex flex-col md:w-1/3 w-full pr-0 md:pr-6 md:border-r border-gray-200 space-y-3">
+              <div className="flex flex-col md:w-1/3 w-full pr-0 md:pr-6 md:border-r border-gray-200 space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Single Day:
+                    Yksi päivä:
                   </label>
                   <input
                     type="checkbox"
@@ -365,7 +339,7 @@ function NewView() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Start Date:
+                    Alkamispäivä:
                   </label>
                   <DatePicker
                     selected={
@@ -387,7 +361,7 @@ function NewView() {
                 {!chart.isSingleDay && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      End Date:
+                      Päättymispäivä:
                     </label>
                     <DatePicker
                       selected={
@@ -409,7 +383,7 @@ function NewView() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Data Type:
+                    Tietotyyppi:
                   </label>
                   {["temperature", "windspeed", "rain"].map((type) => (
                     <div key={type} className="flex items-center">
@@ -424,7 +398,11 @@ function NewView() {
                         htmlFor={`${chart.id}-${type}`}
                         className="text-sm text-gray-700"
                       >
-                        {type}
+                        {type === "temperature"
+                          ? "Lämpötila"
+                          : type === "windspeed"
+                          ? "Tuulen nopeus"
+                          : "Sade"}
                       </label>
                     </div>
                   ))}
@@ -432,23 +410,20 @@ function NewView() {
 
                 <button
                   onClick={() => triggerFetch(chart.id)}
-                  className="py-2 px-9 bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 transition"
+                  className="py-3 px-12 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
                   disabled={isFetching}
                 >
-                  {chart.isLoading ? "Loading..." : "Load Graph"}
+                  {chart.isLoading ? "Ladataan..." : "Lataa kaavio"}
                 </button>
               </div>
 
               <div className="w-full md:w-2/3 pl-0 md:pl-6 flex flex-col">
-                <div className="text-sm font-medium text-gray-700 mb-2">
-                  Showing data for {chart.displayStartDate}{" "}
+                <div className="text-sm font-medium text-gray-700 mb-3">
+                  Näytetään tietoja ajalta {chart.displayStartDate}{" "}
                   {chart.isSingleDay ? "" : `- ${chart.displayEndDate}`}
                 </div>
 
-                <div
-                  className="flex-grow bg-gray-100 rounded-lg mb-4 flex items-center justify-center md:min-h-[500px] lg:min-h-[550px]"
-                  style={{ height: "auto", minHeight: "420px" }}
-                >
+                <div className="flex-grow bg-gray-100 rounded-lg flex items-center justify-center md:min-h-[600px] lg:min-h-[650px]">
                   <GraphComponent
                     startDate={chart.displayStartDate}
                     endDate={chart.displayEndDate}
@@ -463,10 +438,10 @@ function NewView() {
 
           <button
             onClick={addChart}
-            className="mt-8 bg-blue-500 text-white rounded-lg py-2 px-9 hover:bg-blue-600 transition"
+            className="mt-8 bg-blue-500 text-white rounded-lg py-3 px-12 hover:bg-blue-600 transition"
             disabled={isFetching}
           >
-            Add Chart
+            Lisää kaavio
           </button>
         </div>
       </div>

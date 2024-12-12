@@ -16,7 +16,7 @@ const TicketPriceFetcher = () => {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
-        setPrice(data.ticket_price); // Assuming the response has a 'price' field
+        setPrice(data.ticket_price);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -25,7 +25,7 @@ const TicketPriceFetcher = () => {
     };
 
     fetchTicketPrice();
-  }, []); // Empty dependency array ensures this runs only once on load
+  }, []);
 
   if (loading) {
     return <p>Ladataan lipun hintaa...</p>;
@@ -35,7 +35,7 @@ const TicketPriceFetcher = () => {
     return <p style={{ color: "red" }}>Error: {error}</p>;
   }
 
-  return <p>Ticket price today: {price}€</p>;
+  return <p>Lipun hinta tänään: {price}€</p>;
 };
 
 export default TicketPriceFetcher;
